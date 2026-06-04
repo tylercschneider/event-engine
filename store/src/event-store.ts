@@ -14,7 +14,13 @@ export class EventStore {
   }
 
   async all(): Promise<StoredEvent[]> {
-    const page = await this.log.readFrom(null, 100);
-    return page.rows;
+    const events: StoredEvent[] = [];
+    let cursor: string | null = null;
+    do {
+      const page = await this.log.readFrom(cursor, 100);
+      events.push(...page.rows);
+      cursor = page.next;
+    } while (cursor !== null);
+    return events;
   }
 }

@@ -12,4 +12,13 @@ describe("EventStore", () => {
     await store.append(second);
     expect(await store.all()).toEqual([first, second]);
   });
+
+  it("returns events beyond a single page", async () => {
+    const log = new InMemoryAppendOnlyStore<StoredEvent>();
+    const store = new EventStore(log);
+    for (let i = 0; i < 250; i++) {
+      await store.append({ name: "tick", occurredAt: "t", payload: i });
+    }
+    expect(await store.all()).toHaveLength(250);
+  });
 });
