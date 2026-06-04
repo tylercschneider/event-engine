@@ -5,4 +5,8 @@ describe("evaluate", () => {
   it("evaluates a number literal", () => {
     expect(evaluate("42")).toBe(42);
   });
+
+  it("resolves a variable from the bindings", () => {
+    expect(evaluate("revenue", { revenue: 100 })).toBe(100);
+  });
 });
