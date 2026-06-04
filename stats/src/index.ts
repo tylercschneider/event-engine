@@ -8,3 +8,5 @@ export type {
   SeriesPoint,
   BreakdownEntry,
 } from "./result";
+export { resolveInputs, MissingInputError, InvalidInputError } from "./stat";
+export type { Stat, StatInput, Unit, Timeframe } from "./stat";
