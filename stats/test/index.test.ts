@@ -1,5 +1,10 @@
 import { describe, it, expect } from "vitest";
-import { scalar, resolveInputs, type Stat } from "../src/index";
+import {
+  scalar,
+  resolveInputs,
+  InMemoryStatSource,
+  type Stat,
+} from "../src/index";
 
 describe("@stats/stats public api", () => {
   it("narrows a result by its shape through the package entry", () => {
@@ -26,5 +31,29 @@ describe("@stats/stats public api", () => {
     expect(resolveInputs(ActiveUsers, { region: "us" })).toEqual({
       region: "us",
     });
+  });
+
+  it("resolves a declared stat end to end through the package entry", async () => {
+    const Revenue: Stat = {
+      key: "revenue",
+      title: "Revenue",
+      definition: "Total revenue for the account.",
+      unit: "currency",
+      timeframe: "mtd",
+      inputs: {
+        accountId: {
+          key: "accountId",
+          required: true,
+          validate: (value): value is string => typeof value === "string",
+        },
+      },
+    };
+    const source = new InMemoryStatSource();
+    source.define("revenue", () =>
+      scalar(1200, { asOf: "2026-01-01T00:00:00Z", exact: true }),
+    );
+    const inputs = resolveInputs(Revenue, { accountId: "a1" });
+    const result = await source.resolve(Revenue, inputs);
+    expect(result.shape === "scalar" ? result.value : 0).toBe(1200);
   });
 });
