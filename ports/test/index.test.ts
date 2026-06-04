@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { InMemoryKeyedStore, InMemoryAppendOnlyStore } from "../src/index";
+import {
+  InMemoryKeyedStore,
+  InMemoryAppendOnlyStore,
+  InMemoryTransactionManager,
+} from "../src/index";
 
 describe("@stats/ports public api", () => {
   it("exposes a working keyed store through the package entry", async () => {
@@ -13,5 +17,11 @@ describe("@stats/ports public api", () => {
     await log.append(7);
     const page = await log.readFrom(null, 10);
     expect(page.rows).toEqual([7]);
+  });
+
+  it("exposes a transaction manager that tracks the active run", async () => {
+    const manager = new InMemoryTransactionManager();
+    const inside = await manager.run(async () => manager.current() !== null);
+    expect(inside).toBe(true);
   });
 });
