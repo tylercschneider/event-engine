@@ -1,7 +1,13 @@
 import { describe, it, expect } from "vitest";
 import { InMemoryAppendOnlyStore } from "@stats/ports";
 import { EventStore, type StoredEvent } from "@stats/store";
-import { additive, distinct, rollup, MeasureRegistry } from "../src/index";
+import {
+  additive,
+  distinct,
+  rollup,
+  MeasureRegistry,
+  ExactDistinctSketch,
+} from "../src/index";
 
 describe("@stats/metrics public api", () => {
   it("aggregates captured events into a number through the package entry", async () => {
@@ -43,5 +49,15 @@ describe("@stats/metrics public api", () => {
       { bucket: "2026-01", value: 15 },
       { bucket: "2026-02", value: 8 },
     ]);
+  });
+
+  it("merges per-segment distinct sketches into a global count through the package entry", () => {
+    const us = new ExactDistinctSketch();
+    us.add("u1");
+    us.add("u2");
+    const eu = new ExactDistinctSketch();
+    eu.add("u2");
+    eu.add("u3");
+    expect(us.merge(eu).estimate()).toBe(3);
   });
 });
