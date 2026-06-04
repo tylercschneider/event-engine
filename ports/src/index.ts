@@ -1,2 +1,2 @@
-export type { KeyedStore } from "./storage";
-export { InMemoryKeyedStore } from "./storage";
+export type { KeyedStore, AppendOnlyStore, Page } from "./storage";
+export { InMemoryKeyedStore, InMemoryAppendOnlyStore } from "./storage";

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { InMemoryKeyedStore } from "../src/storage";
+import { InMemoryKeyedStore, InMemoryAppendOnlyStore } from "../src/storage";
 
 describe("InMemoryKeyedStore", () => {
   it("returns null for a key that was never put", async () => {
@@ -18,5 +18,42 @@ describe("InMemoryKeyedStore", () => {
     await store.put("u1", { name: "Ada" });
     await store.delete("u1");
     expect(await store.get("u1")).toBeNull();
+  });
+});
+
+describe("InMemoryAppendOnlyStore", () => {
+  it("reads back an appended row from the start", async () => {
+    const log = new InMemoryAppendOnlyStore<{ id: number }>();
+    await log.append({ id: 1 });
+    const page = await log.readFrom(null, 10);
+    expect(page.rows).toEqual([{ id: 1 }]);
+  });
+
+  it("caps a page at the limit", async () => {
+    const log = new InMemoryAppendOnlyStore<number>();
+    await log.append(1);
+    await log.append(2);
+    await log.append(3);
+    const page = await log.readFrom(null, 2);
+    expect(page.rows).toEqual([1, 2]);
+  });
+
+  it("returns a cursor when more rows remain", async () => {
+    const log = new InMemoryAppendOnlyStore<number>();
+    await log.append(1);
+    await log.append(2);
+    await log.append(3);
+    const page = await log.readFrom(null, 2);
+    expect(page.next).not.toBeNull();
+  });
+
+  it("reads the remainder from the returned cursor", async () => {
+    const log = new InMemoryAppendOnlyStore<number>();
+    await log.append(1);
+    await log.append(2);
+    await log.append(3);
+    const first = await log.readFrom(null, 2);
+    const second = await log.readFrom(first.next, 2);
+    expect(second.rows).toEqual([3]);
   });
 });

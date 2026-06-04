@@ -1,10 +1,17 @@
 import { describe, it, expect } from "vitest";
-import { InMemoryKeyedStore } from "../src/index";
+import { InMemoryKeyedStore, InMemoryAppendOnlyStore } from "../src/index";
 
 describe("@stats/ports public api", () => {
   it("exposes a working keyed store through the package entry", async () => {
     const store = new InMemoryKeyedStore<string, number>();
     await store.put("answer", 42);
     expect(await store.get("answer")).toBe(42);
+  });
+
+  it("exposes a working append-only store through the package entry", async () => {
+    const log = new InMemoryAppendOnlyStore<number>();
+    await log.append(7);
+    const page = await log.readFrom(null, 10);
+    expect(page.rows).toEqual([7]);
   });
 });
