@@ -21,6 +21,19 @@ export function additive(
   };
 }
 
+export function distinct(
+  key: string,
+  keyOf: (event: StoredEvent) => string,
+): Measure {
+  return {
+    key,
+    kind: "holistic",
+    compute(events) {
+      return new Set(events.map(keyOf)).size;
+    },
+  };
+}
+
 export function latest(
   key: string,
   valueOf: (event: StoredEvent) => number,
