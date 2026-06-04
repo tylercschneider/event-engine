@@ -64,4 +64,21 @@ describe("EventStore", () => {
     });
     expect(seen).toEqual([first, second]);
   });
+
+  it("awaits an async projection during replay", async () => {
+    const log = new InMemoryAppendOnlyStore<StoredEvent>();
+    const store = new EventStore(log);
+    await store.append({ name: "a", occurredAt: "t", payload: 1 });
+    let done = false;
+    await store.replay(
+      () =>
+        new Promise<void>((resolve) => {
+          setTimeout(() => {
+            done = true;
+            resolve();
+          }, 5);
+        }),
+    );
+    expect(done).toBe(true);
+  });
 });

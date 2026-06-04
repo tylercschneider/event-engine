@@ -23,7 +23,7 @@ export class EventStore {
   }
 
   async replay(projection: Projection): Promise<void> {
-    for (const event of await this.all()) projection(event);
+    for (const event of await this.all()) await projection(event);
   }
 
   async all(): Promise<StoredEvent[]> {
