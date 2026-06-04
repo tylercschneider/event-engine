@@ -3,5 +3,6 @@ packages:
   - "event-engine"
   - "stats"
   - "store"
+  - "metrics"
 allowBuilds:
   esbuild: true
