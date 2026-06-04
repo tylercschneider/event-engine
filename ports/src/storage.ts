@@ -19,3 +19,25 @@ export class InMemoryKeyedStore<Id, Entity> implements KeyedStore<Id, Entity> {
     this.rows.delete(id);
   }
 }
+
+export interface Page<Row> {
+  rows: Row[];
+  next: string | null;
+}
+
+export interface AppendOnlyStore<Row> {
+  append(row: Row): Promise<void>;
+  readFrom(cursor: string | null, limit: number): Promise<Page<Row>>;
+}
+
+export class InMemoryAppendOnlyStore<Row> implements AppendOnlyStore<Row> {
+  private readonly log: Row[] = [];
+
+  async append(row: Row): Promise<void> {
+    this.log.push(row);
+  }
+
+  async readFrom(_cursor: string | null, _limit: number): Promise<Page<Row>> {
+    return { rows: [...this.log], next: null };
+  }
+}

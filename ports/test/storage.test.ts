@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { InMemoryKeyedStore } from "../src/storage";
+import { InMemoryKeyedStore, InMemoryAppendOnlyStore } from "../src/storage";
 
 describe("InMemoryKeyedStore", () => {
   it("returns null for a key that was never put", async () => {
@@ -18,5 +18,14 @@ describe("InMemoryKeyedStore", () => {
     await store.put("u1", { name: "Ada" });
     await store.delete("u1");
     expect(await store.get("u1")).toBeNull();
+  });
+});
+
+describe("InMemoryAppendOnlyStore", () => {
+  it("reads back an appended row from the start", async () => {
+    const log = new InMemoryAppendOnlyStore<{ id: number }>();
+    await log.append({ id: 1 });
+    const page = await log.readFrom(null, 10);
+    expect(page.rows).toEqual([{ id: 1 }]);
   });
 });
