@@ -37,7 +37,7 @@ export class InMemoryAppendOnlyStore<Row> implements AppendOnlyStore<Row> {
     this.log.push(row);
   }
 
-  async readFrom(_cursor: string | null, _limit: number): Promise<Page<Row>> {
-    return { rows: [...this.log], next: null };
+  async readFrom(_cursor: string | null, limit: number): Promise<Page<Row>> {
+    return { rows: this.log.slice(0, limit), next: null };
   }
 }

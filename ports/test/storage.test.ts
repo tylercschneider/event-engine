@@ -28,4 +28,13 @@ describe("InMemoryAppendOnlyStore", () => {
     const page = await log.readFrom(null, 10);
     expect(page.rows).toEqual([{ id: 1 }]);
   });
+
+  it("caps a page at the limit", async () => {
+    const log = new InMemoryAppendOnlyStore<number>();
+    await log.append(1);
+    await log.append(2);
+    await log.append(3);
+    const page = await log.readFrom(null, 2);
+    expect(page.rows).toEqual([1, 2]);
+  });
 });
