@@ -1,9 +1,16 @@
 export interface KeyedStore<Id, Entity> {
   get(id: Id): Promise<Entity | null>;
+  put(id: Id, entity: Entity): Promise<void>;
 }
 
 export class InMemoryKeyedStore<Id, Entity> implements KeyedStore<Id, Entity> {
-  async get(_id: Id): Promise<Entity | null> {
-    return null;
+  private readonly rows = new Map<Id, Entity>();
+
+  async get(id: Id): Promise<Entity | null> {
+    return this.rows.get(id) ?? null;
+  }
+
+  async put(id: Id, entity: Entity): Promise<void> {
+    this.rows.set(id, entity);
   }
 }
