@@ -26,6 +26,13 @@ export class MissingInputError extends Error {
   }
 }
 
+export class InvalidInputError extends Error {
+  constructor(key: string) {
+    super(`input "${key}" failed validation`);
+    this.name = "InvalidInputError";
+  }
+}
+
 export function resolveInputs(
   stat: Stat,
   raw: Record<string, unknown>,
@@ -37,6 +44,7 @@ export function resolveInputs(
       if (input.required) throw new MissingInputError(input.key);
       continue;
     }
+    if (!input.validate(value)) throw new InvalidInputError(input.key);
     resolved[input.key] = value;
   }
   return resolved;
