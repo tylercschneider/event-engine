@@ -19,7 +19,7 @@ export class EventStore {
 
   async append(event: StoredEvent): Promise<void> {
     await this.log.append(event);
-    for (const projection of this.projections) projection(event);
+    for (const projection of this.projections) await projection(event);
   }
 
   async all(): Promise<StoredEvent[]> {

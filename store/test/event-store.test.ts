@@ -33,4 +33,21 @@ describe("EventStore", () => {
     await store.append(event);
     expect(seen).toEqual([event]);
   });
+
+  it("awaits an async projection before append resolves", async () => {
+    const log = new InMemoryAppendOnlyStore<StoredEvent>();
+    const store = new EventStore(log);
+    let done = false;
+    store.subscribe(
+      () =>
+        new Promise<void>((resolve) => {
+          setTimeout(() => {
+            done = true;
+            resolve();
+          }, 5);
+        }),
+    );
+    await store.append({ name: "a", occurredAt: "t", payload: 1 });
+    expect(done).toBe(true);
+  });
 });
