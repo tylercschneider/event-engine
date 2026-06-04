@@ -8,4 +8,9 @@ export class ExactDistinctSketch {
   estimate(): number {
     return this.keys.size;
   }
+
+  merge(other: ExactDistinctSketch): ExactDistinctSketch {
+    for (const key of other.keys) this.keys.add(key);
+    return this;
+  }
 }
