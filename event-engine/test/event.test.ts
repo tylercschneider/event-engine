@@ -34,4 +34,8 @@ describe("defineEvent", () => {
     const event = InvoicePaid.build({ amountCents: 100 }, "2026-01-01T00:00:00Z");
     expect(Object.isFrozen(event.payload)).toBe(true);
   });
+
+  it("exposes the event name on the definition", () => {
+    expect(InvoicePaid.name).toBe("invoice.paid");
+  });
 });
