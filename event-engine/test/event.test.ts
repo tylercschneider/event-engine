@@ -38,4 +38,40 @@ describe("defineEvent", () => {
   it("exposes the event name on the definition", () => {
     expect(InvoicePaid.name).toBe("invoice.paid");
   });
+
+  it("exposes a non-empty fingerprint on the definition", () => {
+    expect(InvoicePaid.fingerprint.length).toBeGreaterThan(0);
+  });
+
+  it("changes the fingerprint when the schema shape changes", () => {
+    const withNumber = defineEvent({
+      name: "thing.happened",
+      version: 1,
+      level: Level.InProcess,
+      schema: z.object({ value: z.number() }),
+    });
+    const withString = defineEvent({
+      name: "thing.happened",
+      version: 1,
+      level: Level.InProcess,
+      schema: z.object({ value: z.string() }),
+    });
+    expect(withNumber.fingerprint).not.toBe(withString.fingerprint);
+  });
+
+  it("changes the fingerprint when the version changes", () => {
+    const v1 = defineEvent({
+      name: "thing.happened",
+      version: 1,
+      level: Level.InProcess,
+      schema: z.object({ value: z.number() }),
+    });
+    const v2 = defineEvent({
+      name: "thing.happened",
+      version: 2,
+      level: Level.InProcess,
+      schema: z.object({ value: z.number() }),
+    });
+    expect(v1.fingerprint).not.toBe(v2.fingerprint);
+  });
 });

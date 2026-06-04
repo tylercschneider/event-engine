@@ -1,3 +1,3 @@
 export { defineEvent, Level } from "./event";
-export { EventRegistry } from "./registry";
+export { EventRegistry, SchemaDriftError } from "./registry";
 export type { NamedEventDefinition } from "./registry";

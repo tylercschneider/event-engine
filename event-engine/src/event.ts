@@ -1,3 +1,5 @@
+import { createHash } from "node:crypto";
+import { zodToJsonSchema } from "zod-to-json-schema";
 import type { z, ZodType } from "zod";
 
 export enum Level {
@@ -18,8 +20,14 @@ interface EventSpec<Name extends string, Schema extends ZodType> {
 export function defineEvent<Name extends string, Schema extends ZodType>(
   spec: EventSpec<Name, Schema>,
 ) {
+  const shape = JSON.stringify(zodToJsonSchema(spec.schema));
+  const fingerprint = createHash("sha256")
+    .update(`${spec.name}:${spec.version}:${shape}`)
+    .digest("hex");
+
   return {
     name: spec.name,
+    fingerprint,
     build(input: z.input<Schema>, occurredAt: string) {
       return {
         name: spec.name,

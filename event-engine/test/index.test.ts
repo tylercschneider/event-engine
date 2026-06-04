@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { z } from "zod";
-import { defineEvent, Level, EventRegistry } from "../src/index";
+import { defineEvent, Level, EventRegistry, SchemaDriftError } from "../src/index";
 
 describe("@stats/event-engine public api", () => {
   it("defines and builds a validated event through the package entry", () => {
@@ -26,5 +26,29 @@ describe("@stats/event-engine public api", () => {
     expect(registry.catalog().map((definition) => definition.name)).toContain(
       "user.signup",
     );
+  });
+
+  it("guards against schema drift through the package entry", () => {
+    const registry = new EventRegistry();
+    const original = defineEvent({
+      name: "order.placed",
+      version: 1,
+      level: Level.Outbox,
+      schema: z.object({ total: z.number() }),
+    });
+    const drifted = defineEvent({
+      name: "order.placed",
+      version: 1,
+      level: Level.Outbox,
+      schema: z.object({ total: z.string() }),
+    });
+    registry.register(original);
+    let caught: unknown;
+    try {
+      registry.register(drifted);
+    } catch (error) {
+      caught = error;
+    }
+    expect(caught).toBeInstanceOf(SchemaDriftError);
   });
 });
