@@ -31,4 +31,16 @@ describe("@stats/store public api", () => {
     await store.append({ name: "user.signup", occurredAt: "t", payload: {} });
     expect(names).toEqual(["user.signup"]);
   });
+
+  it("rebuilds projection state by replaying recorded events through the entry", async () => {
+    const log = new InMemoryAppendOnlyStore<StoredEvent>();
+    const store = new EventStore(log);
+    await store.append({ name: "scored", occurredAt: "t1", payload: 3 });
+    await store.append({ name: "scored", occurredAt: "t2", payload: 4 });
+    let total = 0;
+    await store.replay((event) => {
+      total += event.payload as number;
+    });
+    expect(total).toBe(7);
+  });
 });

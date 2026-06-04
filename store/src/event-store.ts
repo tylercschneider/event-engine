@@ -22,6 +22,10 @@ export class EventStore {
     for (const projection of this.projections) await projection(event);
   }
 
+  async replay(projection: Projection): Promise<void> {
+    for (const event of await this.all()) await projection(event);
+  }
+
   async all(): Promise<StoredEvent[]> {
     const events: StoredEvent[] = [];
     let cursor: string | null = null;
