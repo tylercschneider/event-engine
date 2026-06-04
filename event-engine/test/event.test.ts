@@ -38,4 +38,8 @@ describe("defineEvent", () => {
   it("exposes the event name on the definition", () => {
     expect(InvoicePaid.name).toBe("invoice.paid");
   });
+
+  it("exposes a non-empty fingerprint on the definition", () => {
+    expect(InvoicePaid.fingerprint.length).toBeGreaterThan(0);
+  });
 });
