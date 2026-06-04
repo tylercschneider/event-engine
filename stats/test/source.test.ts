@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { InMemoryStatSource } from "../src/source";
+import { InMemoryStatSource, UnknownStatError } from "../src/source";
 import { scalar } from "../src/result";
 import type { Stat } from "../src/stat";
 
@@ -22,5 +22,16 @@ describe("InMemoryStatSource", () => {
     expect(result).toEqual(
       scalar(500, { asOf: "2026-01-01T00:00:00Z", exact: true }),
     );
+  });
+
+  it("throws UnknownStatError for a stat with no registered resolver", async () => {
+    const source = new InMemoryStatSource();
+    let caught: unknown;
+    try {
+      await source.resolve(Revenue, {});
+    } catch (error) {
+      caught = error;
+    }
+    expect(caught).toBeInstanceOf(UnknownStatError);
   });
 });

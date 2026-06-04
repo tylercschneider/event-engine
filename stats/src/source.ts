@@ -7,6 +7,13 @@ export interface StatSource {
   resolve(stat: Stat, inputs: Record<string, unknown>): Promise<StatResult>;
 }
 
+export class UnknownStatError extends Error {
+  constructor(key: string) {
+    super(`no resolver registered for stat "${key}"`);
+    this.name = "UnknownStatError";
+  }
+}
+
 export class InMemoryStatSource implements StatSource {
   private readonly resolvers = new Map<string, Resolver>();
 
@@ -19,6 +26,7 @@ export class InMemoryStatSource implements StatSource {
     inputs: Record<string, unknown>,
   ): Promise<StatResult> {
     const resolver = this.resolvers.get(stat.key);
-    return resolver!(inputs);
+    if (!resolver) throw new UnknownStatError(stat.key);
+    return resolver(inputs);
   }
 }
