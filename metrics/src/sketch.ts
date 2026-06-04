@@ -10,7 +10,9 @@ export class ExactDistinctSketch {
   }
 
   merge(other: ExactDistinctSketch): ExactDistinctSketch {
-    for (const key of other.keys) this.keys.add(key);
-    return this;
+    const merged = new ExactDistinctSketch();
+    for (const key of this.keys) merged.add(key);
+    for (const key of other.keys) merged.add(key);
+    return merged;
   }
 }

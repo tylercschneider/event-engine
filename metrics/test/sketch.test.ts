@@ -19,4 +19,14 @@ describe("ExactDistinctSketch", () => {
     b.add("u3");
     expect(a.merge(b).estimate()).toBe(3);
   });
+
+  it("does not mutate the operands when merging", () => {
+    const a = new ExactDistinctSketch();
+    a.add("u1");
+    a.add("u2");
+    const b = new ExactDistinctSketch();
+    b.add("u3");
+    a.merge(b);
+    expect(a.estimate()).toBe(2);
+  });
 });
