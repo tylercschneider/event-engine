@@ -11,4 +11,11 @@ describe("InlineJobQueue", () => {
     await queue.enqueue({ name: "count", payload: 7 });
     expect(seen).toEqual([7]);
   });
+
+  it("ignores a job whose name has no registered handler", async () => {
+    const queue = new InlineJobQueue();
+    await expect(
+      queue.enqueue({ name: "unregistered", payload: 1 }),
+    ).resolves.toBeUndefined();
+  });
 });

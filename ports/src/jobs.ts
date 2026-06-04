@@ -20,6 +20,6 @@ export class InlineJobQueue implements JobQueue {
 
   async enqueue<P>(job: Job<P>): Promise<void> {
     const handler = this.handlers.get(job.name);
-    await handler!(job.payload);
+    if (handler) await handler(job.payload);
   }
 }
