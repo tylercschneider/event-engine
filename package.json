@@ -9,8 +9,8 @@
     "node": ">=20"
   },
   "scripts": {
-    "build": "tsc --build",
-    "typecheck": "tsc --build --force",
+    "build": "pnpm -r --if-present build",
+    "typecheck": "pnpm -r --if-present typecheck",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint ."

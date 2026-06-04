@@ -2,3 +2,5 @@ packages:
   - "ports"
   - "event-engine"
   - "stats"
+allowBuilds:
+  esbuild: true
