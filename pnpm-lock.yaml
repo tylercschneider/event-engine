@@ -40,6 +40,19 @@ importers:
 
   stats: {}
 
+  store:
+    dependencies:
+      '@stats/ports':
+        specifier: workspace:*
+        version: link:../ports
+    devDependencies:
+      '@stats/event-engine':
+        specifier: workspace:*
+        version: link:../event-engine
+      zod:
+        specifier: ^3.24.1
+        version: 3.25.76
+
 packages:
 
   '@esbuild/aix-ppc64@0.21.5':
