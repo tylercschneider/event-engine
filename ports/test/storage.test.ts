@@ -37,4 +37,13 @@ describe("InMemoryAppendOnlyStore", () => {
     const page = await log.readFrom(null, 2);
     expect(page.rows).toEqual([1, 2]);
   });
+
+  it("returns a cursor when more rows remain", async () => {
+    const log = new InMemoryAppendOnlyStore<number>();
+    await log.append(1);
+    await log.append(2);
+    await log.append(3);
+    const page = await log.readFrom(null, 2);
+    expect(page.next).not.toBeNull();
+  });
 });
