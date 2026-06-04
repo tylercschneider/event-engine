@@ -42,4 +42,20 @@ describe("defineEvent", () => {
   it("exposes a non-empty fingerprint on the definition", () => {
     expect(InvoicePaid.fingerprint.length).toBeGreaterThan(0);
   });
+
+  it("changes the fingerprint when the schema shape changes", () => {
+    const withNumber = defineEvent({
+      name: "thing.happened",
+      version: 1,
+      level: Level.InProcess,
+      schema: z.object({ value: z.number() }),
+    });
+    const withString = defineEvent({
+      name: "thing.happened",
+      version: 1,
+      level: Level.InProcess,
+      schema: z.object({ value: z.string() }),
+    });
+    expect(withNumber.fingerprint).not.toBe(withString.fingerprint);
+  });
 });
