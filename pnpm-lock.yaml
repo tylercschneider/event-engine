@@ -36,6 +36,16 @@ importers:
         specifier: ^3.25.2
         version: 3.25.2(zod@3.25.76)
 
+  metrics:
+    dependencies:
+      '@stats/store':
+        specifier: workspace:*
+        version: link:../store
+    devDependencies:
+      '@stats/ports':
+        specifier: workspace:*
+        version: link:../ports
+
   ports: {}
 
   stats: {}
