@@ -1,0 +1,8 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./ports" },
+    { "path": "./event-engine" },
+    { "path": "./stats" }
+  ]
+}
