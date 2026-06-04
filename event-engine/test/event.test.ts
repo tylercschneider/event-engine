@@ -19,4 +19,9 @@ describe("defineEvent", () => {
     const event = InvoicePaid.build({ amountCents: 100 }, "2026-01-01T00:00:00Z");
     expect(event.payload).toEqual({ amountCents: 100 });
   });
+
+  it("carries the declared level into the built event", () => {
+    const event = InvoicePaid.build({ amountCents: 100 }, "2026-01-01T00:00:00Z");
+    expect(event.level).toBe(Level.Outbox);
+  });
 });
