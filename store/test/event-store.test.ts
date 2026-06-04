@@ -50,4 +50,18 @@ describe("EventStore", () => {
     await store.append({ name: "a", occurredAt: "t", payload: 1 });
     expect(done).toBe(true);
   });
+
+  it("replays every recorded event through a projection in order", async () => {
+    const log = new InMemoryAppendOnlyStore<StoredEvent>();
+    const store = new EventStore(log);
+    const first: StoredEvent = { name: "a", occurredAt: "t1", payload: 1 };
+    const second: StoredEvent = { name: "b", occurredAt: "t2", payload: 2 };
+    await store.append(first);
+    await store.append(second);
+    const seen: StoredEvent[] = [];
+    await store.replay((event) => {
+      seen.push(event);
+    });
+    expect(seen).toEqual([first, second]);
+  });
 });
