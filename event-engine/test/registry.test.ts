@@ -16,4 +16,11 @@ describe("EventRegistry", () => {
     registry.register(InvoicePaid);
     expect(registry.catalog()).toContain(InvoicePaid);
   });
+
+  it("keeps one catalog entry per event name", () => {
+    const registry = new EventRegistry();
+    registry.register(InvoicePaid);
+    registry.register(InvoicePaid);
+    expect(registry.catalog()).toHaveLength(1);
+  });
 });

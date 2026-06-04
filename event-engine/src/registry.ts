@@ -3,13 +3,13 @@ export interface NamedEventDefinition {
 }
 
 export class EventRegistry {
-  private readonly definitions: NamedEventDefinition[] = [];
+  private readonly byName = new Map<string, NamedEventDefinition>();
 
   register(definition: NamedEventDefinition): void {
-    this.definitions.push(definition);
+    this.byName.set(definition.name, definition);
   }
 
   catalog(): NamedEventDefinition[] {
-    return [...this.definitions];
+    return [...this.byName.values()];
   }
 }
