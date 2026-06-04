@@ -19,6 +19,7 @@ export function defineEvent<Name extends string, Schema extends ZodType>(
   spec: EventSpec<Name, Schema>,
 ) {
   return {
+    name: spec.name,
     build(input: z.input<Schema>, occurredAt: string) {
       return {
         name: spec.name,
