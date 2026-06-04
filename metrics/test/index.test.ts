@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { InMemoryAppendOnlyStore } from "@stats/ports";
 import { EventStore, type StoredEvent } from "@stats/store";
-import { additive, distinct, MeasureRegistry } from "../src/index";
+import { additive, distinct, rollup, MeasureRegistry } from "../src/index";
 
 describe("@stats/metrics public api", () => {
   it("aggregates captured events into a number through the package entry", async () => {
@@ -25,5 +25,23 @@ describe("@stats/metrics public api", () => {
     await store.append({ name: "visit", occurredAt: "t3", payload: "u2" });
     const activeUsers = distinct("active_users", (event) => event.payload as string);
     expect(activeUsers.compute(await store.all())).toBe(2);
+  });
+
+  it("rolls a measure up by bucket from captured events through the package entry", async () => {
+    const log = new InMemoryAppendOnlyStore<StoredEvent>();
+    const store = new EventStore(log);
+    await store.append({ name: "sale", occurredAt: "2026-01", payload: 10 });
+    await store.append({ name: "sale", occurredAt: "2026-02", payload: 8 });
+    await store.append({ name: "sale", occurredAt: "2026-01", payload: 5 });
+    const revenue = additive("revenue", (event) => event.payload as number);
+    const byMonth = rollup(
+      await store.all(),
+      (event) => event.occurredAt,
+      revenue,
+    );
+    expect(byMonth).toEqual([
+      { bucket: "2026-01", value: 15 },
+      { bucket: "2026-02", value: 8 },
+    ]);
   });
 });
