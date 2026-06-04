@@ -25,7 +25,9 @@ export function resolveInputs(
 ): Record<string, unknown> {
   const resolved: Record<string, unknown> = {};
   for (const input of Object.values(stat.inputs)) {
-    resolved[input.key] = raw[input.key];
+    const value = raw[input.key];
+    if (value === undefined) continue;
+    resolved[input.key] = value;
   }
   return resolved;
 }
