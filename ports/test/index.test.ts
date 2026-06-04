@@ -3,6 +3,7 @@ import {
   InMemoryKeyedStore,
   InMemoryAppendOnlyStore,
   InMemoryTransactionManager,
+  InlineJobQueue,
 } from "../src/index";
 
 describe("@stats/ports public api", () => {
@@ -23,5 +24,15 @@ describe("@stats/ports public api", () => {
     const manager = new InMemoryTransactionManager();
     const inside = await manager.run(async () => manager.current() !== null);
     expect(inside).toBe(true);
+  });
+
+  it("exposes a job queue that dispatches to handlers through the package entry", async () => {
+    const queue = new InlineJobQueue();
+    const seen: string[] = [];
+    queue.process<string>("greet", async (payload) => {
+      seen.push(payload);
+    });
+    await queue.enqueue({ name: "greet", payload: "hi" });
+    expect(seen).toEqual(["hi"]);
   });
 });
