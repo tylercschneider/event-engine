@@ -7,3 +7,6 @@ export type { Handler, LevelFilter, DispatchedEvent } from "./handler-registry";
 export { SubscriberRegistry } from "./subscriber-registry";
 export type { Subscriber } from "./subscriber-registry";
 export { EventEngine } from "./event-engine";
+export type { EngineChannels } from "./event-engine";
+export { Notifications } from "./notifications";
+export type { NotificationListener } from "./notifications";

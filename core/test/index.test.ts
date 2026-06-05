@@ -112,4 +112,20 @@ describe("@event-engine/core public api", () => {
     await engine.emit(Signup, { userId: "u1" }, "2026-01-01T00:00:00Z");
     expect(seen).toEqual(["user.signup"]);
   });
+
+  it("observes emitted events via notifications through the package entry", async () => {
+    const engine = new EventEngine();
+    const observed: string[] = [];
+    engine.notifications.on("emitted", (event) => {
+      observed.push(event.name);
+    });
+    const Signup = defineEvent({
+      name: "user.signup",
+      version: 1,
+      level: Level.InProcess,
+      schema: z.object({ userId: z.string() }),
+    });
+    await engine.emit(Signup, { userId: "u1" }, "2026-01-01T00:00:00Z");
+    expect(observed).toEqual(["user.signup"]);
+  });
 });
