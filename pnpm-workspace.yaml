@@ -4,5 +4,6 @@ packages:
   - "stats"
   - "store"
   - "metrics"
+  - "delivery"
 allowBuilds:
   esbuild: true
