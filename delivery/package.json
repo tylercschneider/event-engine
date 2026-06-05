@@ -10,10 +10,10 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@stats/ports": "workspace:*"
+    "@stats/ports": "workspace:*",
+    "@stats/event-engine": "workspace:*"
   },
   "devDependencies": {
-    "@stats/event-engine": "workspace:*",
     "zod": "^3.24.1"
   }
 }
