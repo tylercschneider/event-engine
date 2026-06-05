@@ -7,6 +7,7 @@ import {
   rollup,
   MeasureRegistry,
   ExactDistinctSketch,
+  evaluate,
 } from "../src/index";
 
 describe("@stats/metrics public api", () => {
@@ -59,5 +60,9 @@ describe("@stats/metrics public api", () => {
     eu.add("u2");
     eu.add("u3");
     expect(us.merge(eu).estimate()).toBe(3);
+  });
+
+  it("evaluates a derived-metric expression over measure values through the package entry", () => {
+    expect(evaluate("revenue / orders", { revenue: 1000, orders: 8 })).toBe(125);
   });
 });

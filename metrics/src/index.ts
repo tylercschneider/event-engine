@@ -4,3 +4,4 @@ export { MeasureRegistry, DuplicateMeasureError } from "./registry";
 export { rollup } from "./rollup";
 export type { RollupEntry } from "./rollup";
 export { ExactDistinctSketch } from "./sketch";
+export { evaluate, UnknownVariableError } from "./evaluate";
