@@ -11,8 +11,12 @@ export class OutboxPublisher {
 
   async publish(): Promise<void> {
     for (const record of this.deps.store.pending()) {
-      await this.deps.transport(record.event);
-      this.deps.store.markPublished(record.id);
+      try {
+        await this.deps.transport(record.event);
+        this.deps.store.markPublished(record.id);
+      } catch (error) {
+        this.deps.store.markDeadLettered(record.id, String(error));
+      }
     }
   }
 }
