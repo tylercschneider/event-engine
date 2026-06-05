@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { Level, type Subscriber } from "@event-engine/core";
-import { Delivery } from "../src/delivery";
+import { Delivery, UnsupportedLevelError } from "../src/delivery";
 import type { OutboxEvent } from "../src/outbox";
 
 const noOutbox = { emit: async () => undefined };
@@ -41,5 +41,24 @@ describe("Delivery", () => {
       occurredAt: "t",
     });
     expect(emitted.map((event) => event.name)).toEqual(["invoice.paid"]);
+  });
+
+  it("rejects event-sourcing level events", async () => {
+    const delivery = new Delivery({
+      subscribersFor: () => [],
+      outbox: noOutbox,
+    });
+    let caught: unknown;
+    try {
+      await delivery.handler()({
+        name: "x",
+        level: Level.EventSourcing,
+        payload: 1,
+        occurredAt: "t",
+      });
+    } catch (error) {
+      caught = error;
+    }
+    expect(caught).toBeInstanceOf(UnsupportedLevelError);
   });
 });
