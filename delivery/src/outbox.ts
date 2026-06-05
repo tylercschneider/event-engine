@@ -3,11 +3,13 @@ import type {
   JobQueue,
   TransactionManager,
 } from "@stats/ports";
+import type { Level } from "@stats/event-engine";
 
 export interface OutboxEvent {
   name: string;
   occurredAt: string;
   payload: unknown;
+  level?: Level;
 }
 
 export type Transport = (event: OutboxEvent) => void | Promise<void>;
