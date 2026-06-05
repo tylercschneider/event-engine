@@ -23,4 +23,10 @@ describe("canView", () => {
       canView(shared("private"), { userId: "owner", accountId: "acct" }),
     ).toBe(true);
   });
+
+  it("lets a same-account member view an account-wide dashboard", () => {
+    expect(
+      canView(shared("account_wide"), { userId: "other", accountId: "acct" }),
+    ).toBe(true);
+  });
 });
