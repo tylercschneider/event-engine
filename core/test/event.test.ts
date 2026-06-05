@@ -45,6 +45,11 @@ describe("defineEvent", () => {
     expect(event.metadata).toEqual({});
   });
 
+  it("generates an idempotency key by default", () => {
+    const event = InvoicePaid.build({ amountCents: 100 }, "2026-01-01T00:00:00Z");
+    expect(event.idempotencyKey.length).toBeGreaterThan(0);
+  });
+
   it("freezes the built event payload", () => {
     const event = InvoicePaid.build({ amountCents: 100 }, "2026-01-01T00:00:00Z");
     expect(Object.isFrozen(event.payload)).toBe(true);
