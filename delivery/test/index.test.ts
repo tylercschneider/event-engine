@@ -9,6 +9,7 @@ import {
 import {
   Outbox,
   Delivery,
+  OutboxStore,
   levelRouter,
   retrying,
   type OutboxEvent,
@@ -109,5 +110,16 @@ describe("@event-engine/delivery public api", () => {
     });
     await engine.emit(Signup, { userId: "u1" }, "2026-01-01T00:00:00Z");
     expect(ran).toEqual(["user.signup"]);
+  });
+
+  it("tracks outbox record state through the package entry", () => {
+    const store = new OutboxStore();
+    const record = store.record({
+      name: "invoice.paid",
+      occurredAt: "t",
+      payload: 1,
+    });
+    store.markPublished(record.id);
+    expect(store.counts()).toMatchObject({ total: 1, published: 1, pending: 0 });
   });
 });

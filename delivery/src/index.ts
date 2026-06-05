@@ -5,3 +5,5 @@ export { retrying } from "./retry";
 export type { DeadLetter, DeadLetterSink, RetryOptions } from "./retry";
 export { Delivery, UnsupportedLevelError } from "./delivery";
 export type { DeliveryDeps } from "./delivery";
+export { OutboxStore } from "./outbox-store";
+export type { OutboxRecord, OutboxStatus } from "./outbox-store";
