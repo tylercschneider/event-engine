@@ -19,4 +19,14 @@ describe("OutboxDashboard", () => {
     const dashboard = new OutboxDashboard(store);
     expect(dashboard.events(1, 2)).toHaveLength(2);
   });
+
+  it("lists dead-lettered records", () => {
+    const store = new OutboxStore();
+    const record = store.record(event);
+    store.markDeadLettered(record.id, "boom");
+    const dashboard = new OutboxDashboard(store);
+    expect(dashboard.deadLetters().map((entry) => entry.id)).toEqual([
+      record.id,
+    ]);
+  });
 });

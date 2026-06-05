@@ -11,4 +11,8 @@ export class OutboxDashboard {
     const start = (page - 1) * perPage;
     return this.store.list().slice(start, start + perPage);
   }
+
+  deadLetters(): OutboxRecord[] {
+    return this.store.deadLetters();
+  }
 }
