@@ -9,8 +9,10 @@ import {
 import {
   Outbox,
   levelRouter,
+  retrying,
   type OutboxEvent,
   type Transport,
+  type DeadLetter,
 } from "../src/index";
 
 describe("@event-engine/delivery public api", () => {
@@ -54,5 +56,28 @@ describe("@event-engine/delivery public api", () => {
     const outbox = new Outbox(log, jobs, transactions, levelRouter(routes));
     await outbox.emit(InvoicePaid.build({ amountCents: 100 }, "2026-01-01T00:00:00Z"));
     expect(delivered).toEqual(["invoice.paid"]);
+  });
+
+  it("dead-letters an undeliverable event emitted through the package entry", async () => {
+    const log = new InMemoryAppendOnlyStore<OutboxEvent>();
+    const jobs = new InlineJobQueue();
+    const transactions = new InMemoryTransactionManager();
+    const deadLettered: DeadLetter[] = [];
+    const transport = retrying(
+      () => {
+        throw new Error("broker down");
+      },
+      {
+        attempts: 3,
+        onDeadLetter: (entry) => {
+          deadLettered.push(entry);
+        },
+      },
+    );
+    const outbox = new Outbox(log, jobs, transactions, transport);
+    await outbox.emit({ name: "invoice.paid", occurredAt: "t", payload: 1 });
+    expect(deadLettered.map((entry) => entry.event.name)).toEqual([
+      "invoice.paid",
+    ]);
   });
 });
