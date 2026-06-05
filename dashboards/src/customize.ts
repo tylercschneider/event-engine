@@ -1,8 +1,21 @@
-import type { Dashboard } from "./dashboard";
+import type { Dashboard, Placement } from "./dashboard";
+
+function mapPlacement(
+  dashboard: Dashboard,
+  statKey: string,
+  transform: (placement: Placement) => Placement,
+): Dashboard {
+  return {
+    ...dashboard,
+    placements: dashboard.placements.map((placement) =>
+      placement.statKey === statKey ? transform(placement) : placement,
+    ),
+  };
+}
 
 export function hidePlacement(dashboard: Dashboard, statKey: string): Dashboard {
-  for (const placement of dashboard.placements) {
-    if (placement.statKey === statKey) placement.hidden = true;
-  }
-  return dashboard;
+  return mapPlacement(dashboard, statKey, (placement) => ({
+    ...placement,
+    hidden: true,
+  }));
 }

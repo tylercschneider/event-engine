@@ -30,4 +30,13 @@ describe("hidePlacement", () => {
         ?.hidden,
     ).toBe(true);
   });
+
+  it("does not mutate the original dashboard", () => {
+    const dashboard = makeDashboard();
+    hidePlacement(dashboard, "revenue");
+    expect(
+      dashboard.placements.find((placement) => placement.statKey === "revenue")
+        ?.hidden,
+    ).toBeUndefined();
+  });
 });
