@@ -25,4 +25,8 @@ describe("evaluate", () => {
   it("divides factors", () => {
     expect(evaluate("12 / 4")).toBe(3);
   });
+
+  it("evaluates parenthesised groups first", () => {
+    expect(evaluate("(2 + 3) * 4")).toBe(20);
+  });
 });
