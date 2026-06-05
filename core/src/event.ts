@@ -18,6 +18,14 @@ interface EventSpec<Name extends string, Schema extends ZodType> {
   schema: Schema;
 }
 
+export interface BuildOptions {
+  metadata?: Record<string, unknown>;
+  idempotencyKey?: string;
+  aggregateType?: string;
+  aggregateId?: string;
+  aggregateVersion?: number;
+}
+
 export function defineEvent<Name extends string, Schema extends ZodType>(
   spec: EventSpec<Name, Schema>,
 ) {
@@ -29,7 +37,11 @@ export function defineEvent<Name extends string, Schema extends ZodType>(
   return {
     name: spec.name,
     fingerprint,
-    build(input: z.input<Schema>, occurredAt: string) {
+    build(
+      input: z.input<Schema>,
+      occurredAt: string,
+      options: BuildOptions = {},
+    ) {
       return {
         name: spec.name,
         type: spec.type ?? spec.name,
@@ -37,6 +49,7 @@ export function defineEvent<Name extends string, Schema extends ZodType>(
         level: spec.level,
         payload: Object.freeze(spec.schema.parse(input)) as Readonly<z.output<Schema>>,
         occurredAt,
+        metadata: options.metadata ?? {},
       };
     },
   };

@@ -40,6 +40,11 @@ describe("defineEvent", () => {
     expect(event.type).toBe("invoice.paid");
   });
 
+  it("defaults metadata to an empty object", () => {
+    const event = InvoicePaid.build({ amountCents: 100 }, "2026-01-01T00:00:00Z");
+    expect(event.metadata).toEqual({});
+  });
+
   it("freezes the built event payload", () => {
     const event = InvoicePaid.build({ amountCents: 100 }, "2026-01-01T00:00:00Z");
     expect(Object.isFrozen(event.payload)).toBe(true);
