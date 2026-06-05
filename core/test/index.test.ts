@@ -7,6 +7,8 @@ import {
   SchemaDriftError,
   HandlerRegistry,
   EventEngine,
+  CloudReporter,
+  type ReportEntry,
 } from "../src/index";
 
 describe("@event-engine/core public api", () => {
@@ -127,5 +129,25 @@ describe("@event-engine/core public api", () => {
     });
     await engine.emit(Signup, { userId: "u1" }, "2026-01-01T00:00:00Z");
     expect(observed).toEqual(["user.signup"]);
+  });
+
+  it("reports emitted events as metadata to the cloud client through the package entry", async () => {
+    const engine = new EventEngine();
+    const sent: ReportEntry[][] = [];
+    const reporter = new CloudReporter((batch) => {
+      sent.push(batch);
+    });
+    engine.notifications.on("emitted", (event) => {
+      reporter.track("emitted", event);
+    });
+    const Signup = defineEvent({
+      name: "user.signup",
+      version: 1,
+      level: Level.InProcess,
+      schema: z.object({ userId: z.string() }),
+    });
+    await engine.emit(Signup, { userId: "u1" }, "2026-01-01T00:00:00Z");
+    await reporter.flush();
+    expect(sent[0]?.[0]).toMatchObject({ name: "user.signup", status: "emitted" });
   });
 });

@@ -10,3 +10,5 @@ export { EventEngine } from "./event-engine";
 export type { EngineChannels } from "./event-engine";
 export { Notifications } from "./notifications";
 export type { NotificationListener } from "./notifications";
+export { CloudReporter } from "./cloud-reporter";
+export type { ReportEntry, ReportClient, ReportStatus } from "./cloud-reporter";
