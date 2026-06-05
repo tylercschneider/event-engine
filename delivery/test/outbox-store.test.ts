@@ -10,4 +10,16 @@ describe("OutboxStore", () => {
     const record = store.record(event);
     expect(record.status).toBe("pending");
   });
+
+  it("counts pending records", () => {
+    const store = new OutboxStore();
+    store.record(event);
+    store.record(event);
+    expect(store.counts()).toEqual({
+      total: 2,
+      pending: 2,
+      published: 0,
+      deadLettered: 0,
+    });
+  });
 });
