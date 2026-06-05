@@ -7,6 +7,7 @@ import {
 } from "@stats/stats";
 import {
   resolveDashboard,
+  setFilter,
   type Dashboard,
   type DataProvider,
 } from "../src/index";
@@ -47,5 +48,29 @@ describe("@stats/dashboards public api", () => {
     expect(resolved.placements[0]?.result).toEqual(
       scalar(4200, { asOf: "t", exact: true }),
     );
+  });
+
+  it("applies a saved filter then resolves it through the package entry", async () => {
+    const seen: Record<string, unknown>[] = [];
+    const provider: DataProvider = {
+      async resolve(_statKey, params) {
+        seen.push(params);
+        return scalar(1, { asOf: "t", exact: true });
+      },
+    };
+    const dashboard: Dashboard = {
+      title: "Filtered",
+      placements: [
+        {
+          statKey: "revenue",
+          params: {},
+          chart: "number",
+          layout: { x: 0, y: 0, w: 3, h: 2 },
+        },
+      ],
+    };
+    const filtered = setFilter(dashboard, "revenue", { region: "us" });
+    await resolveDashboard(filtered, provider);
+    expect(seen).toEqual([{ region: "us" }]);
   });
 });
