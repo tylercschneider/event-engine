@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { retrying } from "../src/retry";
+import { retrying, type DeadLetter } from "../src/retry";
 import type { OutboxEvent } from "../src/outbox";
 
 const event: OutboxEvent = { name: "invoice.paid", occurredAt: "t", payload: 1 };
@@ -28,5 +28,22 @@ describe("retrying", () => {
     );
     await transport(event);
     expect(calls).toBe(2);
+  });
+
+  it("dead-letters after exhausting all attempts", async () => {
+    const deadLettered: DeadLetter[] = [];
+    const transport = retrying(
+      () => {
+        throw new Error("down");
+      },
+      {
+        attempts: 3,
+        onDeadLetter: (entry) => {
+          deadLettered.push(entry);
+        },
+      },
+    );
+    await transport(event);
+    expect(deadLettered.map((entry) => entry.attempts)).toEqual([3]);
   });
 });
