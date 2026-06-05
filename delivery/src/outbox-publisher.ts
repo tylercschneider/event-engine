@@ -24,6 +24,7 @@ export class OutboxPublisher {
         this.deps.notifications?.emit("published", record);
       } catch (error) {
         this.deps.store.markDeadLettered(record.id, String(error));
+        this.deps.notifications?.emit("dead_lettered", record);
       }
     }
   }

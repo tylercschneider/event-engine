@@ -50,4 +50,23 @@ describe("OutboxPublisher", () => {
     await publisher.publish();
     expect(published).toEqual(["invoice.paid"]);
   });
+
+  it("fires a dead_lettered notification for each dead-lettered record", async () => {
+    const store = new OutboxStore();
+    store.record(event);
+    const notifications = new Notifications<DeliveryChannels>();
+    const deadLettered: string[] = [];
+    notifications.on("dead_lettered", (record) => {
+      deadLettered.push(record.event.name);
+    });
+    const publisher = new OutboxPublisher({
+      store,
+      transport: () => {
+        throw new Error("down");
+      },
+      notifications,
+    });
+    await publisher.publish();
+    expect(deadLettered).toEqual(["invoice.paid"]);
+  });
 });
