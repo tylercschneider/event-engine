@@ -45,6 +45,7 @@ export async function resolveDashboard(
 ): Promise<ResolvedDashboard> {
   const placements: ResolvedPlacement[] = [];
   for (const placement of dashboard.placements) {
+    if (placement.hidden) continue;
     const result = await provider.resolve(placement.statKey, placement.params);
     placements.push({
       statKey: placement.statKey,

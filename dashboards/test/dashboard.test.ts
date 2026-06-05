@@ -30,4 +30,21 @@ describe("resolveDashboard", () => {
       scalar(100, { asOf: "t", exact: true }),
     );
   });
+
+  it("skips hidden placements", async () => {
+    const dashboard: Dashboard = {
+      title: "Overview",
+      placements: [
+        {
+          statKey: "revenue",
+          params: {},
+          chart: "number",
+          layout: { x: 0, y: 0, w: 3, h: 2 },
+          hidden: true,
+        },
+      ],
+    };
+    const resolved = await resolveDashboard(dashboard, numberProvider);
+    expect(resolved.placements).toEqual([]);
+  });
 });
