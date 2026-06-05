@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { evaluate, UnknownVariableError } from "../src/evaluate";
+import {
+  evaluate,
+  UnknownVariableError,
+  ExpressionError,
+} from "../src/evaluate";
 
 describe("evaluate", () => {
   it("evaluates a number literal", () => {
@@ -32,5 +36,17 @@ describe("evaluate", () => {
 
   it("throws UnknownVariableError for an unbound variable", () => {
     expect(() => evaluate("missing + 1")).toThrow(UnknownVariableError);
+  });
+
+  it("rejects trailing tokens after a complete expression", () => {
+    expect(() => evaluate("1 2")).toThrow(ExpressionError);
+  });
+
+  it("rejects an unclosed parenthesis", () => {
+    expect(() => evaluate("(1 + 2")).toThrow(ExpressionError);
+  });
+
+  it("rejects an empty expression", () => {
+    expect(() => evaluate("")).toThrow(ExpressionError);
   });
 });
