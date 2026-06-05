@@ -5,6 +5,13 @@ export class UnknownVariableError extends Error {
   }
 }
 
+export class ExpressionError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "ExpressionError";
+  }
+}
+
 type Token = string;
 
 function tokenize(expression: string): Token[] {
@@ -47,6 +54,15 @@ class Parser {
     return this.tokens[this.position++];
   }
 
+  parse(): number {
+    const value = this.parseExpression();
+    const remaining = this.peek();
+    if (remaining !== undefined) {
+      throw new ExpressionError(`unexpected token "${remaining}"`);
+    }
+    return value;
+  }
+
   parseExpression(): number {
     let value = this.parseTerm();
     while (this.peek() === "+" || this.peek() === "-") {
@@ -86,5 +102,5 @@ export function evaluate(
   expression: string,
   variables: Record<string, number> = {},
 ): number {
-  return new Parser(tokenize(expression), variables).parseExpression();
+  return new Parser(tokenize(expression), variables).parse();
 }
