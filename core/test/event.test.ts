@@ -9,6 +9,19 @@ const InvoicePaid = defineEvent({
   schema: z.object({ amountCents: z.number() }),
 });
 
+describe("Level", () => {
+  it("orders the durability ladder from telemetry to event-sourcing", () => {
+    expect([
+      Level.Telemetry,
+      Level.InProcess,
+      Level.Background,
+      Level.Outbox,
+      Level.Broker,
+      Level.EventSourcing,
+    ]).toEqual([0, 1, 2, 3, 4, 5]);
+  });
+});
+
 describe("defineEvent", () => {
   it("carries the event name into the built event", () => {
     const event = InvoicePaid.build({ amountCents: 100 }, "2026-01-01T00:00:00Z");

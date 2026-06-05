@@ -5,9 +5,10 @@ import type { z, ZodType } from "zod";
 export enum Level {
   Telemetry = 0,
   InProcess = 1,
-  Outbox = 2,
-  Retry = 3,
+  Background = 2,
+  Outbox = 3,
   Broker = 4,
+  EventSourcing = 5,
 }
 
 interface EventSpec<Name extends string, Schema extends ZodType> {
