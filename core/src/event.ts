@@ -31,6 +31,7 @@ export function defineEvent<Name extends string, Schema extends ZodType>(
     build(input: z.input<Schema>, occurredAt: string) {
       return {
         name: spec.name,
+        version: spec.version,
         level: spec.level,
         payload: Object.freeze(spec.schema.parse(input)) as Readonly<z.output<Schema>>,
         occurredAt,

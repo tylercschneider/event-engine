@@ -30,6 +30,11 @@ describe("defineEvent", () => {
     expect(event.occurredAt).toBe("2026-01-01T00:00:00Z");
   });
 
+  it("carries the event version into the built event", () => {
+    const event = InvoicePaid.build({ amountCents: 100 }, "2026-01-01T00:00:00Z");
+    expect(event.version).toBe(1);
+  });
+
   it("freezes the built event payload", () => {
     const event = InvoicePaid.build({ amountCents: 100 }, "2026-01-01T00:00:00Z");
     expect(Object.isFrozen(event.payload)).toBe(true);
