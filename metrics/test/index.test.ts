@@ -9,6 +9,7 @@ import {
   ExactDistinctSketch,
   evaluate,
   derived,
+  ExpressionError,
 } from "../src/index";
 
 describe("@event-engine/metrics public api", () => {
@@ -65,6 +66,16 @@ describe("@event-engine/metrics public api", () => {
 
   it("evaluates a derived-metric expression over measure values through the package entry", () => {
     expect(evaluate("revenue / orders", { revenue: 1000, orders: 8 })).toBe(125);
+  });
+
+  it("rejects a malformed expression through the package entry", () => {
+    let caught: unknown;
+    try {
+      evaluate("(1 + 2");
+    } catch (error) {
+      caught = error;
+    }
+    expect(caught).toBeInstanceOf(ExpressionError);
   });
 
   it("computes a derived metric from registered measures through the package entry", async () => {
