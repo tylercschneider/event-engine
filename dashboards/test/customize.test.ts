@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { hidePlacement } from "../src/customize";
+import { hidePlacement, setFilter } from "../src/customize";
 import type { Dashboard } from "../src/dashboard";
 
 function makeDashboard(): Dashboard {
@@ -38,5 +38,15 @@ describe("hidePlacement", () => {
       dashboard.placements.find((placement) => placement.statKey === "revenue")
         ?.hidden,
     ).toBeUndefined();
+  });
+});
+
+describe("setFilter", () => {
+  it("binds saved filter params to the matching placement", () => {
+    const next = setFilter(makeDashboard(), "revenue", { region: "us" });
+    expect(
+      next.placements.find((placement) => placement.statKey === "revenue")
+        ?.params,
+    ).toEqual({ region: "us" });
   });
 });

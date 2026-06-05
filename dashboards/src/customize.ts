@@ -19,3 +19,14 @@ export function hidePlacement(dashboard: Dashboard, statKey: string): Dashboard 
     hidden: true,
   }));
 }
+
+export function setFilter(
+  dashboard: Dashboard,
+  statKey: string,
+  params: Record<string, unknown>,
+): Dashboard {
+  return mapPlacement(dashboard, statKey, (placement) => ({
+    ...placement,
+    params,
+  }));
+}
