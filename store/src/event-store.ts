@@ -8,10 +8,18 @@ export interface StoredEvent {
 
 export type Projection = (event: StoredEvent) => void | Promise<void>;
 
+export type ProjectionErrorHandler = (
+  error: unknown,
+  event: StoredEvent,
+) => void;
+
 export class EventStore {
   private readonly projections: Projection[] = [];
 
-  constructor(private readonly log: AppendOnlyStore<StoredEvent>) {}
+  constructor(
+    private readonly log: AppendOnlyStore<StoredEvent>,
+    private readonly onProjectionError: ProjectionErrorHandler = () => undefined,
+  ) {}
 
   subscribe(projection: Projection): void {
     this.projections.push(projection);
@@ -19,7 +27,13 @@ export class EventStore {
 
   async append(event: StoredEvent): Promise<void> {
     await this.log.append(event);
-    for (const projection of this.projections) await projection(event);
+    for (const projection of this.projections) {
+      try {
+        await projection(event);
+      } catch (error) {
+        this.onProjectionError(error, event);
+      }
+    }
   }
 
   async replay(projection: Projection): Promise<void> {

@@ -51,6 +51,20 @@ describe("EventStore", () => {
     expect(done).toBe(true);
   });
 
+  it("routes a projection error to the error handler", async () => {
+    const log = new InMemoryAppendOnlyStore<StoredEvent>();
+    const errors: unknown[] = [];
+    const store = new EventStore(log, (error) => {
+      errors.push(error);
+    });
+    const boom = new Error("boom");
+    store.subscribe(() => {
+      throw boom;
+    });
+    await store.append({ name: "x", occurredAt: "t", payload: 1 });
+    expect(errors).toEqual([boom]);
+  });
+
   it("replays every recorded event through a projection in order", async () => {
     const log = new InMemoryAppendOnlyStore<StoredEvent>();
     const store = new EventStore(log);
