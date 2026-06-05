@@ -8,8 +8,10 @@ import {
 import {
   resolveDashboard,
   setFilter,
+  canView,
   type Dashboard,
   type DataProvider,
+  type SharedDashboard,
 } from "../src/index";
 
 describe("@stats/dashboards public api", () => {
@@ -72,5 +74,16 @@ describe("@stats/dashboards public api", () => {
     const filtered = setFilter(dashboard, "revenue", { region: "us" });
     await resolveDashboard(filtered, provider);
     expect(seen).toEqual([{ region: "us" }]);
+  });
+
+  it("denies a stranger access to a private dashboard through the package entry", () => {
+    const shared: SharedDashboard = {
+      dashboard: { title: "Secret", placements: [] },
+      owner: { userId: "owner", accountId: "acct" },
+      visibility: "private",
+    };
+    expect(canView(shared, { userId: "stranger", accountId: "other" })).toBe(
+      false,
+    );
   });
 });
