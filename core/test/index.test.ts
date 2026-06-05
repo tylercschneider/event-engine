@@ -8,6 +8,7 @@ import {
   HandlerRegistry,
   EventEngine,
   CloudReporter,
+  mergeSchema,
   type ReportEntry,
 } from "../src/index";
 
@@ -149,5 +150,11 @@ describe("@event-engine/core public api", () => {
     await engine.emit(Signup, { userId: "u1" }, "2026-01-01T00:00:00Z");
     await reporter.flush();
     expect(sent[0]?.[0]).toMatchObject({ name: "user.signup", status: "emitted" });
+  });
+
+  it("auto-versions a changed event across merges through the package entry", () => {
+    const first = mergeSchema([{ name: "order.placed", shape: "a" }], []);
+    const second = mergeSchema([{ name: "order.placed", shape: "b" }], first);
+    expect(second.map((entry) => entry.version)).toEqual([1, 2]);
   });
 });
