@@ -16,4 +16,17 @@ describe("retrying", () => {
     await transport(event);
     expect(delivered).toEqual([event]);
   });
+
+  it("retries a failing transport until it succeeds", async () => {
+    let calls = 0;
+    const transport = retrying(
+      () => {
+        calls++;
+        if (calls < 2) throw new Error("flaky");
+      },
+      { attempts: 3, onDeadLetter: () => undefined },
+    );
+    await transport(event);
+    expect(calls).toBe(2);
+  });
 });

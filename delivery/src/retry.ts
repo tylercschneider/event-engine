@@ -15,9 +15,19 @@ export interface RetryOptions {
 
 export function retrying(transport: Transport, options: RetryOptions): Transport {
   return async (event: OutboxEvent) => {
+    let lastError: unknown;
     for (let attempt = 1; attempt <= options.attempts; attempt++) {
-      await transport(event);
-      return;
+      try {
+        await transport(event);
+        return;
+      } catch (error) {
+        lastError = error;
+      }
     }
+    await options.onDeadLetter({
+      event,
+      error: lastError,
+      attempts: options.attempts,
+    });
   };
 }
