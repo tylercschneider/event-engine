@@ -1,4 +1,5 @@
 import type { AppendOnlyStore } from "@event-engine/ports";
+import type { Handler } from "@event-engine/core";
 
 export interface StoredEvent {
   name: string;
@@ -27,13 +28,22 @@ export class EventStore {
 
   async append(event: StoredEvent): Promise<void> {
     await this.log.append(event);
-    for (const projection of this.projections) {
-      try {
-        await projection(event);
-      } catch (error) {
-        this.onProjectionError(error, event);
+  }
+
+  recorder(): Handler {
+    return (event) => this.append(event);
+  }
+
+  projectionDispatcher(): Handler {
+    return async (event) => {
+      for (const projection of this.projections) {
+        try {
+          await projection(event);
+        } catch (error) {
+          this.onProjectionError(error, event);
+        }
       }
-    }
+    };
   }
 
   async replay(projection: Projection): Promise<void> {

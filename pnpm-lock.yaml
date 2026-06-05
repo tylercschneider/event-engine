@@ -71,13 +71,13 @@ importers:
 
   store:
     dependencies:
+      '@event-engine/core':
+        specifier: workspace:*
+        version: link:../core
       '@event-engine/ports':
         specifier: workspace:*
         version: link:../ports
     devDependencies:
-      '@event-engine/core':
-        specifier: workspace:*
-        version: link:../core
       zod:
         specifier: ^3.24.1
         version: 3.25.76

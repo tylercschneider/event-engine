@@ -1,8 +1,13 @@
 import { describe, it, expect } from "vitest";
 import { InMemoryAppendOnlyStore } from "@event-engine/ports";
+import { Level } from "@event-engine/core";
 import { EventStore, type StoredEvent } from "../src/event-store";
 
-describe("EventStore", () => {
+function dispatched(name: string): StoredEvent & { level: Level } {
+  return { name, level: Level.Outbox, payload: 1, occurredAt: "t" };
+}
+
+describe("EventStore recording", () => {
   it("returns appended events in order", async () => {
     const log = new InMemoryAppendOnlyStore<StoredEvent>();
     const store = new EventStore(log);
@@ -22,19 +27,29 @@ describe("EventStore", () => {
     expect(await store.all()).toHaveLength(250);
   });
 
-  it("delivers an appended event to a subscribed projection", async () => {
+  it("records a dispatched event through the recorder handler", async () => {
     const log = new InMemoryAppendOnlyStore<StoredEvent>();
     const store = new EventStore(log);
-    const seen: StoredEvent[] = [];
+    await store.recorder()(dispatched("invoice.paid"));
+    expect((await store.all()).map((event) => event.name)).toEqual([
+      "invoice.paid",
+    ]);
+  });
+});
+
+describe("EventStore projections", () => {
+  it("delivers a dispatched event to a subscribed projection", async () => {
+    const log = new InMemoryAppendOnlyStore<StoredEvent>();
+    const store = new EventStore(log);
+    const seen: string[] = [];
     store.subscribe((event) => {
-      seen.push(event);
+      seen.push(event.name);
     });
-    const event: StoredEvent = { name: "a", occurredAt: "t", payload: 1 };
-    await store.append(event);
-    expect(seen).toEqual([event]);
+    await store.projectionDispatcher()(dispatched("a"));
+    expect(seen).toEqual(["a"]);
   });
 
-  it("awaits an async projection before append resolves", async () => {
+  it("awaits an async projection in the dispatcher", async () => {
     const log = new InMemoryAppendOnlyStore<StoredEvent>();
     const store = new EventStore(log);
     let done = false;
@@ -47,7 +62,7 @@ describe("EventStore", () => {
           }, 5);
         }),
     );
-    await store.append({ name: "a", occurredAt: "t", payload: 1 });
+    await store.projectionDispatcher()(dispatched("a"));
     expect(done).toBe(true);
   });
 
@@ -61,7 +76,7 @@ describe("EventStore", () => {
     store.subscribe(() => {
       throw boom;
     });
-    await store.append({ name: "x", occurredAt: "t", payload: 1 });
+    await store.projectionDispatcher()(dispatched("a"));
     expect(errors).toEqual([boom]);
   });
 
@@ -75,10 +90,12 @@ describe("EventStore", () => {
     store.subscribe((event) => {
       seen.push(event.name);
     });
-    await store.append({ name: "x", occurredAt: "t", payload: 1 });
-    expect(seen).toEqual(["x"]);
+    await store.projectionDispatcher()(dispatched("a"));
+    expect(seen).toEqual(["a"]);
   });
+});
 
+describe("EventStore replay", () => {
   it("replays every recorded event through a projection in order", async () => {
     const log = new InMemoryAppendOnlyStore<StoredEvent>();
     const store = new EventStore(log);
