@@ -1,6 +1,12 @@
 import { describe, it, expect } from "vitest";
 import { z } from "zod";
-import { defineEvent, Level, EventRegistry, SchemaDriftError } from "../src/index";
+import {
+  defineEvent,
+  Level,
+  EventRegistry,
+  SchemaDriftError,
+  HandlerRegistry,
+} from "../src/index";
 
 describe("@event-engine/core public api", () => {
   it("defines and builds a validated event through the package entry", () => {
@@ -50,5 +56,23 @@ describe("@event-engine/core public api", () => {
       caught = error;
     }
     expect(caught).toBeInstanceOf(SchemaDriftError);
+  });
+
+  it("dispatches an event only to handlers matching its level through the package entry", async () => {
+    const registry = new HandlerRegistry();
+    const ran: string[] = [];
+    registry.register(() => {
+      ran.push("broker");
+    }, [Level.Broker]);
+    registry.register(() => {
+      ran.push("outbox");
+    }, [Level.Outbox]);
+    await registry.dispatch({
+      name: "order.placed",
+      level: Level.Outbox,
+      payload: {},
+      occurredAt: "t",
+    });
+    expect(ran).toEqual(["outbox"]);
   });
 });
