@@ -14,4 +14,11 @@ describe("ColumnarSink", () => {
       payload: [1, 2],
     });
   });
+
+  it("accumulates across multiple batches", () => {
+    const sink = new ColumnarSink();
+    sink.write([{ name: "a", occurredAt: "t1", payload: 1 }]);
+    sink.write([{ name: "b", occurredAt: "t2", payload: 2 }]);
+    expect(sink.columns.name).toEqual(["a", "b"]);
+  });
 });

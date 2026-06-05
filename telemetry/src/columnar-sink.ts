@@ -7,13 +7,13 @@ export interface Columns {
 }
 
 export class ColumnarSink implements Sink {
-  columns: Columns = { name: [], occurredAt: [], payload: [] };
+  readonly columns: Columns = { name: [], occurredAt: [], payload: [] };
 
   write(batch: Signal[]): void {
-    this.columns = {
-      name: batch.map((signal) => signal.name),
-      occurredAt: batch.map((signal) => signal.occurredAt),
-      payload: batch.map((signal) => signal.payload),
-    };
+    for (const signal of batch) {
+      this.columns.name.push(signal.name);
+      this.columns.occurredAt.push(signal.occurredAt);
+      this.columns.payload.push(signal.payload);
+    }
   }
 }
