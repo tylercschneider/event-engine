@@ -20,6 +20,26 @@ describe("@event-engine/core public api", () => {
     expect(event.payload).toEqual({ userId: "u1" });
   });
 
+  it("builds a full event envelope through the package entry", () => {
+    const Signup = defineEvent({
+      name: "user.signup",
+      version: 2,
+      level: Level.InProcess,
+      schema: z.object({ userId: z.string() }),
+    });
+    const event = Signup.build({ userId: "u1" }, "2026-01-01T00:00:00Z", {
+      metadata: { source: "web" },
+    });
+    expect(event).toMatchObject({
+      name: "user.signup",
+      type: "user.signup",
+      version: 2,
+      level: Level.InProcess,
+      occurredAt: "2026-01-01T00:00:00Z",
+      metadata: { source: "web" },
+    });
+  });
+
   it("registers a defined event and lists it in the catalog", () => {
     const registry = new EventRegistry();
     const Signup = defineEvent({
