@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { Level, type Subscriber } from "@event-engine/core";
+import { InlineJobQueue } from "@event-engine/ports";
 import { Delivery, UnsupportedLevelError } from "../src/delivery";
 import type { OutboxEvent } from "../src/outbox";
 
@@ -41,6 +42,25 @@ describe("Delivery", () => {
       occurredAt: "t",
     });
     expect(emitted.map((event) => event.name)).toEqual(["invoice.paid"]);
+  });
+
+  it("dispatches subscribers via a background job for background events", async () => {
+    const ran: string[] = [];
+    const subscriber: Subscriber = (event) => {
+      ran.push(event.name);
+    };
+    const delivery = new Delivery({
+      subscribersFor: (name) => (name === "x" ? [subscriber] : []),
+      outbox: noOutbox,
+      jobs: new InlineJobQueue(),
+    });
+    await delivery.handler()({
+      name: "x",
+      level: Level.Background,
+      payload: 1,
+      occurredAt: "t",
+    });
+    expect(ran).toEqual(["x"]);
   });
 
   it("rejects event-sourcing level events", async () => {
