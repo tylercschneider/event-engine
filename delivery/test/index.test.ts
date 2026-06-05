@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { z } from "zod";
-import { defineEvent, Level } from "@event-engine/core";
+import { defineEvent, Level, EventEngine } from "@event-engine/core";
 import {
   InMemoryAppendOnlyStore,
   InlineJobQueue,
@@ -8,6 +8,7 @@ import {
 } from "@event-engine/ports";
 import {
   Outbox,
+  Delivery,
   levelRouter,
   retrying,
   type OutboxEvent,
@@ -79,5 +80,34 @@ describe("@event-engine/delivery public api", () => {
     expect(deadLettered.map((entry) => entry.event.name)).toEqual([
       "invoice.paid",
     ]);
+  });
+
+  it("routes an in-process event to a subscriber through the EventEngine via the package entry", async () => {
+    const engine = new EventEngine();
+    const ran: string[] = [];
+    engine.subscribe("user.signup", (event) => {
+      ran.push(event.name);
+    });
+    const log = new InMemoryAppendOnlyStore<OutboxEvent>();
+    const outbox = new Outbox(
+      log,
+      new InlineJobQueue(),
+      new InMemoryTransactionManager(),
+      () => undefined,
+    );
+    const delivery = new Delivery({
+      subscribersFor: (name) => engine.subscribersFor(name),
+      outbox,
+    });
+    engine.registerHandler(delivery.handler(), "all");
+
+    const Signup = defineEvent({
+      name: "user.signup",
+      version: 1,
+      level: Level.InProcess,
+      schema: z.object({ userId: z.string() }),
+    });
+    await engine.emit(Signup, { userId: "u1" }, "2026-01-01T00:00:00Z");
+    expect(ran).toEqual(["user.signup"]);
   });
 });
