@@ -35,6 +35,11 @@ describe("defineEvent", () => {
     expect(event.version).toBe(1);
   });
 
+  it("defaults the event type to the event name", () => {
+    const event = InvoicePaid.build({ amountCents: 100 }, "2026-01-01T00:00:00Z");
+    expect(event.type).toBe("invoice.paid");
+  });
+
   it("freezes the built event payload", () => {
     const event = InvoicePaid.build({ amountCents: 100 }, "2026-01-01T00:00:00Z");
     expect(Object.isFrozen(event.payload)).toBe(true);
