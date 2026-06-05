@@ -6,6 +6,7 @@ import {
   EventRegistry,
   SchemaDriftError,
   HandlerRegistry,
+  EventEngine,
 } from "../src/index";
 
 describe("@event-engine/core public api", () => {
@@ -94,5 +95,21 @@ describe("@event-engine/core public api", () => {
       occurredAt: "t",
     });
     expect(ran).toEqual(["outbox"]);
+  });
+
+  it("emits a defined event through the EventEngine via the package entry", async () => {
+    const engine = new EventEngine();
+    const seen: string[] = [];
+    engine.registerHandler((event) => {
+      seen.push(event.name);
+    }, "all");
+    const Signup = defineEvent({
+      name: "user.signup",
+      version: 1,
+      level: Level.InProcess,
+      schema: z.object({ userId: z.string() }),
+    });
+    await engine.emit(Signup, { userId: "u1" }, "2026-01-01T00:00:00Z");
+    expect(seen).toEqual(["user.signup"]);
   });
 });
