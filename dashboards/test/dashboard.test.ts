@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { scalar } from "@stats/stats";
+import { scalar } from "@event-engine/stats";
 import {
   resolveDashboard,
   type Dashboard,

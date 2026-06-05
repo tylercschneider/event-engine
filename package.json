@@ -1,5 +1,5 @@
 {
-  "name": "stats-platform",
+  "name": "event-engine",
   "version": "0.0.0",
   "private": true,
   "description": "Composable TypeScript packages for event capture, data management, and stat display.",

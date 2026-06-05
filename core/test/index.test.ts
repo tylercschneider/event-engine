@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { z } from "zod";
 import { defineEvent, Level, EventRegistry, SchemaDriftError } from "../src/index";
 
-describe("@stats/event-engine public api", () => {
+describe("@event-engine/core public api", () => {
   it("defines and builds a validated event through the package entry", () => {
     const Signup = defineEvent({
       name: "user.signup",

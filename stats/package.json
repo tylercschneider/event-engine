@@ -1,5 +1,5 @@
 {
-  "name": "@stats/stats",
+  "name": "@event-engine/stats",
   "version": "0.0.0",
   "private": true,
   "type": "module",

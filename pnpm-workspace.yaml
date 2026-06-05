@@ -1,6 +1,6 @@
 packages:
   - "ports"
-  - "event-engine"
+  - "core"
   - "stats"
   - "store"
   - "metrics"

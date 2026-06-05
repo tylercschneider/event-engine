@@ -1,4 +1,4 @@
-import type { StoredEvent } from "@stats/store";
+import type { StoredEvent } from "@event-engine/store";
 import type { Measure } from "./measure";
 import { evaluate } from "./evaluate";
 

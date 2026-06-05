@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { InMemoryAppendOnlyStore } from "@stats/ports";
+import { InMemoryAppendOnlyStore } from "@event-engine/ports";
 import { EventStore, type StoredEvent } from "../src/event-store";
 
 describe("EventStore", () => {
