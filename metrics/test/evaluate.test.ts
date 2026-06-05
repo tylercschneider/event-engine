@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { evaluate } from "../src/evaluate";
+import { evaluate, UnknownVariableError } from "../src/evaluate";
 
 describe("evaluate", () => {
   it("evaluates a number literal", () => {
@@ -28,5 +28,9 @@ describe("evaluate", () => {
 
   it("evaluates parenthesised groups first", () => {
     expect(evaluate("(2 + 3) * 4")).toBe(20);
+  });
+
+  it("throws UnknownVariableError for an unbound variable", () => {
+    expect(() => evaluate("missing + 1")).toThrow(UnknownVariableError);
   });
 });

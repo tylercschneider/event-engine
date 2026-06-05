@@ -1,3 +1,10 @@
+export class UnknownVariableError extends Error {
+  constructor(name: string) {
+    super(`unknown variable "${name}"`);
+    this.name = "UnknownVariableError";
+  }
+}
+
 type Token = string;
 
 function tokenize(expression: string): Token[] {
@@ -69,7 +76,9 @@ class Parser {
       return value;
     }
     if (token in this.variables) return this.variables[token]!;
-    return Number(token);
+    const value = Number(token);
+    if (Number.isNaN(value)) throw new UnknownVariableError(token);
+    return value;
   }
 }
 
