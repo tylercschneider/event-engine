@@ -27,26 +27,7 @@ importers:
         specifier: ^2.1.8
         version: 2.1.9(@types/node@22.19.19)
 
-  dashboards:
-    dependencies:
-      '@stats/stats':
-        specifier: workspace:*
-        version: link:../stats
-
-  delivery:
-    dependencies:
-      '@stats/event-engine':
-        specifier: workspace:*
-        version: link:../event-engine
-      '@stats/ports':
-        specifier: workspace:*
-        version: link:../ports
-    devDependencies:
-      zod:
-        specifier: ^3.24.1
-        version: 3.25.76
-
-  event-engine:
+  core:
     dependencies:
       zod:
         specifier: ^3.24.1
@@ -55,13 +36,32 @@ importers:
         specifier: ^3.25.2
         version: 3.25.2(zod@3.25.76)
 
+  dashboards:
+    dependencies:
+      '@event-engine/stats':
+        specifier: workspace:*
+        version: link:../stats
+
+  delivery:
+    dependencies:
+      '@event-engine/core':
+        specifier: workspace:*
+        version: link:../core
+      '@event-engine/ports':
+        specifier: workspace:*
+        version: link:../ports
+    devDependencies:
+      zod:
+        specifier: ^3.24.1
+        version: 3.25.76
+
   metrics:
     dependencies:
-      '@stats/store':
+      '@event-engine/store':
         specifier: workspace:*
         version: link:../store
     devDependencies:
-      '@stats/ports':
+      '@event-engine/ports':
         specifier: workspace:*
         version: link:../ports
 
@@ -71,22 +71,22 @@ importers:
 
   store:
     dependencies:
-      '@stats/ports':
+      '@event-engine/ports':
         specifier: workspace:*
         version: link:../ports
     devDependencies:
-      '@stats/event-engine':
+      '@event-engine/core':
         specifier: workspace:*
-        version: link:../event-engine
+        version: link:../core
       zod:
         specifier: ^3.24.1
         version: 3.25.76
 
   telemetry:
     devDependencies:
-      '@stats/event-engine':
+      '@event-engine/core':
         specifier: workspace:*
-        version: link:../event-engine
+        version: link:../core
       zod:
         specifier: ^3.24.1
         version: 3.25.76

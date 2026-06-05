@@ -1,5 +1,5 @@
 {
-  "name": "@stats/store",
+  "name": "@event-engine/store",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -10,10 +10,10 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@stats/ports": "workspace:*"
+    "@event-engine/ports": "workspace:*"
   },
   "devDependencies": {
-    "@stats/event-engine": "workspace:*",
+    "@event-engine/core": "workspace:*",
     "zod": "^3.24.1"
   }
 }

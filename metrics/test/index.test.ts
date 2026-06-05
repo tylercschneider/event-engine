@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { InMemoryAppendOnlyStore } from "@stats/ports";
-import { EventStore, type StoredEvent } from "@stats/store";
+import { InMemoryAppendOnlyStore } from "@event-engine/ports";
+import { EventStore, type StoredEvent } from "@event-engine/store";
 import {
   additive,
   distinct,
@@ -11,7 +11,7 @@ import {
   derived,
 } from "../src/index";
 
-describe("@stats/metrics public api", () => {
+describe("@event-engine/metrics public api", () => {
   it("aggregates captured events into a number through the package entry", async () => {
     const log = new InMemoryAppendOnlyStore<StoredEvent>();
     const store = new EventStore(log);

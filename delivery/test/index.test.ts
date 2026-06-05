@@ -1,11 +1,11 @@
 import { describe, it, expect } from "vitest";
 import { z } from "zod";
-import { defineEvent, Level } from "@stats/event-engine";
+import { defineEvent, Level } from "@event-engine/core";
 import {
   InMemoryAppendOnlyStore,
   InlineJobQueue,
   InMemoryTransactionManager,
-} from "@stats/ports";
+} from "@event-engine/ports";
 import {
   Outbox,
   levelRouter,
@@ -13,7 +13,7 @@ import {
   type Transport,
 } from "../src/index";
 
-describe("@stats/delivery public api", () => {
+describe("@event-engine/delivery public api", () => {
   it("emits a defined event and delivers it through a transport via the package entry", async () => {
     const InvoicePaid = defineEvent({
       name: "invoice.paid",

@@ -1,5 +1,5 @@
 {
-  "name": "@stats/ports",
+  "name": "@event-engine/ports",
   "version": "0.0.0",
   "private": true,
   "type": "module",

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import type { StoredEvent } from "@stats/store";
+import type { StoredEvent } from "@event-engine/store";
 import { additive } from "../src/measure";
 import { derived } from "../src/derived";
 

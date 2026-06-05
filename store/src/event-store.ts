@@ -1,4 +1,4 @@
-import type { AppendOnlyStore } from "@stats/ports";
+import type { AppendOnlyStore } from "@event-engine/ports";
 
 export interface StoredEvent {
   name: string;

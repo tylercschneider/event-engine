@@ -1,5 +1,5 @@
 {
-  "name": "@stats/metrics",
+  "name": "@event-engine/metrics",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -10,9 +10,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@stats/store": "workspace:*"
+    "@event-engine/store": "workspace:*"
   },
   "devDependencies": {
-    "@stats/ports": "workspace:*"
+    "@event-engine/ports": "workspace:*"
   }
 }
