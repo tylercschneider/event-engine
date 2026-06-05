@@ -36,4 +36,35 @@ describe("OutboxStore", () => {
     store.markDeadLettered(record.id, "boom");
     expect(store.counts()).toMatchObject({ pending: 0, deadLettered: 1 });
   });
+
+  it("lists all records", () => {
+    const store = new OutboxStore();
+    store.record(event);
+    store.record(event);
+    expect(store.list()).toHaveLength(2);
+  });
+
+  it("lists only pending records via pending()", () => {
+    const store = new OutboxStore();
+    const first = store.record(event);
+    store.record(event);
+    store.markPublished(first.id);
+    expect(store.pending().map((record) => record.status)).toEqual(["pending"]);
+  });
+
+  it("lists only dead-lettered records via deadLetters()", () => {
+    const store = new OutboxStore();
+    const first = store.record(event);
+    store.record(event);
+    store.markDeadLettered(first.id, "boom");
+    expect(store.deadLetters().map((record) => record.id)).toEqual([first.id]);
+  });
+
+  it("retries a dead-lettered record back to pending", () => {
+    const store = new OutboxStore();
+    const first = store.record(event);
+    store.markDeadLettered(first.id, "boom");
+    store.retry(first.id);
+    expect(store.counts()).toMatchObject({ pending: 1, deadLettered: 0 });
+  });
 });

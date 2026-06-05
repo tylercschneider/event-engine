@@ -27,6 +27,27 @@ export class OutboxStore {
     return record;
   }
 
+  list(): OutboxRecord[] {
+    return [...this.records.values()];
+  }
+
+  pending(): OutboxRecord[] {
+    return this.list().filter((record) => record.status === "pending");
+  }
+
+  deadLetters(): OutboxRecord[] {
+    return this.list().filter((record) => record.status === "dead_lettered");
+  }
+
+  retry(id: string): void {
+    const record = this.records.get(id);
+    if (!record) return;
+    record.status = "pending";
+    record.attempts = 0;
+    record.deadLetteredAt = undefined;
+    record.lastError = undefined;
+  }
+
   markPublished(id: string): void {
     const record = this.records.get(id);
     if (!record) return;
