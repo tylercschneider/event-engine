@@ -1,4 +1,5 @@
 export { resolveDashboard } from "./dashboard";
+export { hidePlacement, setFilter, reorderPlacements } from "./customize";
 export type {
   Dashboard,
   Placement,
