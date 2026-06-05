@@ -9,4 +9,4 @@ export { OutboxStore } from "./outbox-store";
 export type { OutboxRecord, OutboxStatus } from "./outbox-store";
 export { OutboxDashboard } from "./outbox-dashboard";
 export { OutboxPublisher } from "./outbox-publisher";
-export type { PublisherDeps } from "./outbox-publisher";
+export type { PublisherDeps, DeliveryChannels } from "./outbox-publisher";

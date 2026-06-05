@@ -1,6 +1,11 @@
 import { describe, it, expect } from "vitest";
 import { z } from "zod";
-import { defineEvent, Level, EventEngine } from "@event-engine/core";
+import {
+  defineEvent,
+  Level,
+  EventEngine,
+  Notifications,
+} from "@event-engine/core";
 import {
   InMemoryAppendOnlyStore,
   InlineJobQueue,
@@ -17,6 +22,7 @@ import {
   type OutboxEvent,
   type Transport,
   type DeadLetter,
+  type DeliveryChannels,
 } from "../src/index";
 
 describe("@event-engine/delivery public api", () => {
@@ -151,5 +157,21 @@ describe("@event-engine/delivery public api", () => {
     await publisher.publish();
     const dashboard = new OutboxDashboard(store);
     expect(dashboard.summary()).toMatchObject({ published: 1, pending: 0 });
+  });
+
+  it("observes published events via notifications through the package entry", async () => {
+    const store = new OutboxStore();
+    store.record({ name: "invoice.paid", occurredAt: "t", payload: 1 });
+    const notifications = new Notifications<DeliveryChannels>();
+    const observed: string[] = [];
+    notifications.on("published", (record) => {
+      observed.push(record.event.name);
+    });
+    await new OutboxPublisher({
+      store,
+      transport: async () => undefined,
+      notifications,
+    }).publish();
+    expect(observed).toEqual(["invoice.paid"]);
   });
 });
