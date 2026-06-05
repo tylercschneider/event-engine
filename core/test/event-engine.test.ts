@@ -20,4 +20,14 @@ describe("EventEngine", () => {
     await engine.emit(InvoicePaid, { amountCents: 100 }, "2026-01-01T00:00:00Z");
     expect(seen).toEqual(["invoice.paid"]);
   });
+
+  it("fires an emitted notification carrying the built event", async () => {
+    const engine = new EventEngine();
+    const observed: string[] = [];
+    engine.notifications.on("emitted", (event) => {
+      observed.push(event.name);
+    });
+    await engine.emit(InvoicePaid, { amountCents: 100 }, "2026-01-01T00:00:00Z");
+    expect(observed).toEqual(["invoice.paid"]);
+  });
 });

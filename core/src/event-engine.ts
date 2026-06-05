@@ -5,7 +5,12 @@ import {
   type DispatchedEvent,
 } from "./handler-registry";
 import { SubscriberRegistry, type Subscriber } from "./subscriber-registry";
+import { Notifications } from "./notifications";
 import type { BuildOptions } from "./event";
+
+export type EngineChannels = {
+  emitted: DispatchedEvent;
+};
 
 interface Emittable<Input> {
   build(
@@ -16,6 +21,7 @@ interface Emittable<Input> {
 }
 
 export class EventEngine {
+  readonly notifications = new Notifications<EngineChannels>();
   private readonly handlers = new HandlerRegistry();
   private readonly subscribers = new SubscriberRegistry();
 
@@ -38,6 +44,7 @@ export class EventEngine {
     options?: BuildOptions,
   ): Promise<DispatchedEvent> {
     const event = definition.build(input, occurredAt, options);
+    this.notifications.emit("emitted", event);
     await this.handlers.dispatch(event);
     return event;
   }
