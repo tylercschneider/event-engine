@@ -59,4 +59,12 @@ describe("OutboxStore", () => {
     store.markDeadLettered(first.id, "boom");
     expect(store.deadLetters().map((record) => record.id)).toEqual([first.id]);
   });
+
+  it("retries a dead-lettered record back to pending", () => {
+    const store = new OutboxStore();
+    const first = store.record(event);
+    store.markDeadLettered(first.id, "boom");
+    store.retry(first.id);
+    expect(store.counts()).toMatchObject({ pending: 1, deadLettered: 0 });
+  });
 });
