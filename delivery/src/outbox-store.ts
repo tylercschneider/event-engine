@@ -35,6 +35,10 @@ export class OutboxStore {
     return this.list().filter((record) => record.status === "pending");
   }
 
+  deadLetters(): OutboxRecord[] {
+    return this.list().filter((record) => record.status === "dead_lettered");
+  }
+
   markPublished(id: string): void {
     const record = this.records.get(id);
     if (!record) return;
