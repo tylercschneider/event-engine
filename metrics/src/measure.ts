@@ -1,6 +1,11 @@
 import type { StoredEvent } from "@stats/store";
 
-export type MeasureKind = "additive" | "semi_additive" | "holistic" | "cohort";
+export type MeasureKind =
+  | "additive"
+  | "semi_additive"
+  | "holistic"
+  | "cohort"
+  | "derived";
 
 export interface Measure {
   key: string;
