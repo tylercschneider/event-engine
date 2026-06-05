@@ -1,4 +1,10 @@
-import { Level, type Handler, type Subscriber } from "@event-engine/core";
+import {
+  Level,
+  type Handler,
+  type Subscriber,
+  type DispatchedEvent,
+} from "@event-engine/core";
+import type { JobQueue } from "@event-engine/ports";
 import type { OutboxEvent } from "./outbox";
 
 export class UnsupportedLevelError extends Error {
@@ -11,17 +17,31 @@ export class UnsupportedLevelError extends Error {
 export interface DeliveryDeps {
   subscribersFor: (eventName: string) => Subscriber[];
   outbox: { emit: (event: OutboxEvent) => Promise<void> };
+  jobs?: JobQueue;
 }
 
 export class Delivery {
-  constructor(private readonly deps: DeliveryDeps) {}
+  constructor(private readonly deps: DeliveryDeps) {
+    this.deps.jobs?.process<DispatchedEvent>("dispatch-subscribers", (event) =>
+      this.dispatchSubscribers(event),
+    );
+  }
+
+  private async dispatchSubscribers(event: DispatchedEvent): Promise<void> {
+    for (const subscriber of this.deps.subscribersFor(event.name)) {
+      await subscriber(event);
+    }
+  }
 
   handler(): Handler {
     return async (event) => {
       if (event.level === Level.InProcess) {
-        for (const subscriber of this.deps.subscribersFor(event.name)) {
-          await subscriber(event);
-        }
+        await this.dispatchSubscribers(event);
+      } else if (event.level === Level.Background) {
+        await this.deps.jobs?.enqueue<DispatchedEvent>({
+          name: "dispatch-subscribers",
+          payload: event,
+        });
       } else if (event.level === Level.Outbox || event.level === Level.Broker) {
         await this.deps.outbox.emit(event);
       } else if (event.level === Level.EventSourcing) {
