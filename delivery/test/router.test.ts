@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { Level } from "@stats/event-engine";
-import { levelRouter } from "../src/router";
+import { levelRouter, UnroutableLevelError } from "../src/router";
 import type { OutboxEvent, Transport } from "../src/outbox";
 
 describe("levelRouter", () => {
@@ -18,5 +18,22 @@ describe("levelRouter", () => {
     };
     await route(event);
     expect(delivered).toEqual([event]);
+  });
+
+  it("throws UnroutableLevelError when no transport is registered for the level", async () => {
+    const route = levelRouter(new Map());
+    const event: OutboxEvent = {
+      name: "broadcast",
+      occurredAt: "t",
+      payload: 1,
+      level: Level.Broker,
+    };
+    let caught: unknown;
+    try {
+      await route(event);
+    } catch (error) {
+      caught = error;
+    }
+    expect(caught).toBeInstanceOf(UnroutableLevelError);
   });
 });
