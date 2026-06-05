@@ -8,6 +8,7 @@ import {
   MeasureRegistry,
   ExactDistinctSketch,
   evaluate,
+  derived,
 } from "../src/index";
 
 describe("@stats/metrics public api", () => {
@@ -64,5 +65,22 @@ describe("@stats/metrics public api", () => {
 
   it("evaluates a derived-metric expression over measure values through the package entry", () => {
     expect(evaluate("revenue / orders", { revenue: 1000, orders: 8 })).toBe(125);
+  });
+
+  it("computes a derived metric from registered measures through the package entry", async () => {
+    const log = new InMemoryAppendOnlyStore<StoredEvent>();
+    const store = new EventStore(log);
+    await store.append({ name: "order", occurredAt: "t1", payload: 100 });
+    await store.append({ name: "order", occurredAt: "t2", payload: 60 });
+
+    const registry = new MeasureRegistry();
+    registry.define(additive("revenue", (event) => event.payload as number));
+    registry.define(additive("orders", () => 1));
+
+    const averageOrderValue = derived("aov", "revenue / orders", {
+      revenue: registry.get("revenue")!,
+      orders: registry.get("orders")!,
+    });
+    expect(averageOrderValue.compute(await store.all())).toBe(80);
   });
 });
