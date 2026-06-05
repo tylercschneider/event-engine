@@ -42,9 +42,10 @@ class Parser {
 
   parseExpression(): number {
     let value = this.parseTerm();
-    while (this.peek() === "+") {
-      this.next();
-      value += this.parseTerm();
+    while (this.peek() === "+" || this.peek() === "-") {
+      const operator = this.next();
+      const term = this.parseTerm();
+      value = operator === "+" ? value + term : value - term;
     }
     return value;
   }

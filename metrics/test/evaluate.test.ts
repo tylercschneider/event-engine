@@ -17,4 +17,8 @@ describe("evaluate", () => {
   it("multiplies before adding", () => {
     expect(evaluate("2 + 3 * 4")).toBe(14);
   });
+
+  it("subtracts terms", () => {
+    expect(evaluate("10 - 3")).toBe(7);
+  });
 });
