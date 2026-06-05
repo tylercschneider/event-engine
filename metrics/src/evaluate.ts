@@ -50,7 +50,12 @@ class Parser {
   }
 
   private parseTerm(): number {
-    return this.parseFactor();
+    let value = this.parseFactor();
+    while (this.peek() === "*") {
+      this.next();
+      value *= this.parseFactor();
+    }
+    return value;
   }
 
   private parseFactor(): number {

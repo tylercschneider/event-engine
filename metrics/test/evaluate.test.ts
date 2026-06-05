@@ -13,4 +13,8 @@ describe("evaluate", () => {
   it("adds two terms", () => {
     expect(evaluate("1 + 2")).toBe(3);
   });
+
+  it("multiplies before adding", () => {
+    expect(evaluate("2 + 3 * 4")).toBe(14);
+  });
 });
