@@ -11,6 +11,7 @@ import {
   Delivery,
   OutboxStore,
   OutboxDashboard,
+  OutboxPublisher,
   levelRouter,
   retrying,
   type OutboxEvent,
@@ -135,5 +136,20 @@ describe("@event-engine/delivery public api", () => {
     const dashboard = new OutboxDashboard(store);
     dashboard.retryAll();
     expect(dashboard.summary()).toMatchObject({ pending: 1, deadLettered: 0 });
+  });
+
+  it("publishes the outbox and reflects it in the dashboard through the package entry", async () => {
+    const store = new OutboxStore();
+    store.record({ name: "invoice.paid", occurredAt: "t", payload: 1 });
+    const delivered: string[] = [];
+    const publisher = new OutboxPublisher({
+      store,
+      transport: (event) => {
+        delivered.push(event.name);
+      },
+    });
+    await publisher.publish();
+    const dashboard = new OutboxDashboard(store);
+    expect(dashboard.summary()).toMatchObject({ published: 1, pending: 0 });
   });
 });
