@@ -7,3 +7,4 @@ export { Delivery, UnsupportedLevelError } from "./delivery";
 export type { DeliveryDeps } from "./delivery";
 export { OutboxStore } from "./outbox-store";
 export type { OutboxRecord, OutboxStatus } from "./outbox-store";
+export { OutboxDashboard } from "./outbox-dashboard";

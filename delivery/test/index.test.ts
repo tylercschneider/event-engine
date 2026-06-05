@@ -10,6 +10,7 @@ import {
   Outbox,
   Delivery,
   OutboxStore,
+  OutboxDashboard,
   levelRouter,
   retrying,
   type OutboxEvent,
@@ -121,5 +122,18 @@ describe("@event-engine/delivery public api", () => {
     });
     store.markPublished(record.id);
     expect(store.counts()).toMatchObject({ total: 1, published: 1, pending: 0 });
+  });
+
+  it("recovers dead-lettered events via the dashboard through the package entry", () => {
+    const store = new OutboxStore();
+    const record = store.record({
+      name: "invoice.paid",
+      occurredAt: "t",
+      payload: 1,
+    });
+    store.markDeadLettered(record.id, "broker down");
+    const dashboard = new OutboxDashboard(store);
+    dashboard.retryAll();
+    expect(dashboard.summary()).toMatchObject({ pending: 1, deadLettered: 0 });
   });
 });
