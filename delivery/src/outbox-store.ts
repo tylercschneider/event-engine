@@ -27,6 +27,21 @@ export class OutboxStore {
     return record;
   }
 
+  markPublished(id: string): void {
+    const record = this.records.get(id);
+    if (!record) return;
+    record.status = "published";
+    record.publishedAt = new Date().toISOString();
+  }
+
+  markDeadLettered(id: string, error: string): void {
+    const record = this.records.get(id);
+    if (!record) return;
+    record.status = "dead_lettered";
+    record.deadLetteredAt = new Date().toISOString();
+    record.lastError = error;
+  }
+
   counts(): {
     total: number;
     pending: number;

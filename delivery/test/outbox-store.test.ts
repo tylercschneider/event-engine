@@ -22,4 +22,18 @@ describe("OutboxStore", () => {
       deadLettered: 0,
     });
   });
+
+  it("marks a record published", () => {
+    const store = new OutboxStore();
+    const record = store.record(event);
+    store.markPublished(record.id);
+    expect(store.counts()).toMatchObject({ pending: 0, published: 1 });
+  });
+
+  it("marks a record dead-lettered", () => {
+    const store = new OutboxStore();
+    const record = store.record(event);
+    store.markDeadLettered(record.id, "boom");
+    expect(store.counts()).toMatchObject({ pending: 0, deadLettered: 1 });
+  });
 });
