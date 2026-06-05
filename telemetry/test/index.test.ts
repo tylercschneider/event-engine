@@ -4,6 +4,7 @@ import { defineEvent, Level } from "@stats/event-engine";
 import {
   Collector,
   collectorHandler,
+  ColumnarSink,
   type Signal,
   type Sink,
 } from "../src/index";
@@ -41,5 +42,13 @@ describe("@stats/telemetry public api", () => {
       { name: "page.view", occurredAt: "t", payload: { path: "/b" } },
     ]);
     expect(batches[0]?.length).toBe(2);
+  });
+
+  it("flushes collected signals into a columnar sink through the package entry", async () => {
+    const sink = new ColumnarSink();
+    const collector = new Collector(sink, 2);
+    await collector.collect({ name: "page.view", occurredAt: "t1", payload: {} });
+    await collector.collect({ name: "page.view", occurredAt: "t2", payload: {} });
+    expect(sink.columns.name).toEqual(["page.view", "page.view"]);
   });
 });
