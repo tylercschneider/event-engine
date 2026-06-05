@@ -45,4 +45,8 @@ describe("evaluate", () => {
   it("rejects an unclosed parenthesis", () => {
     expect(() => evaluate("(1 + 2")).toThrow(ExpressionError);
   });
+
+  it("rejects an empty expression", () => {
+    expect(() => evaluate("")).toThrow(ExpressionError);
+  });
 });

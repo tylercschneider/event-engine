@@ -85,7 +85,9 @@ class Parser {
 
   private parseFactor(): number {
     const token = this.next();
-    if (token === undefined) throw new Error("unexpected end of expression");
+    if (token === undefined) {
+      throw new ExpressionError("unexpected end of expression");
+    }
     if (token === "(") {
       const value = this.parseExpression();
       if (this.next() !== ")") throw new ExpressionError("expected ')'");
