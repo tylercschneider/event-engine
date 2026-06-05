@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { OutboxPublisher } from "../src/outbox-publisher";
+import { Notifications } from "@event-engine/core";
+import {
+  OutboxPublisher,
+  type DeliveryChannels,
+} from "../src/outbox-publisher";
 import { OutboxStore } from "../src/outbox-store";
 import type { OutboxEvent } from "../src/outbox";
 
@@ -28,5 +32,22 @@ describe("OutboxPublisher", () => {
     });
     await publisher.publish();
     expect(store.counts()).toMatchObject({ deadLettered: 1, pending: 0 });
+  });
+
+  it("fires a published notification for each published record", async () => {
+    const store = new OutboxStore();
+    store.record(event);
+    const notifications = new Notifications<DeliveryChannels>();
+    const published: string[] = [];
+    notifications.on("published", (record) => {
+      published.push(record.event.name);
+    });
+    const publisher = new OutboxPublisher({
+      store,
+      transport: async () => undefined,
+      notifications,
+    });
+    await publisher.publish();
+    expect(published).toEqual(["invoice.paid"]);
   });
 });
