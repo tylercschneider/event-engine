@@ -16,4 +16,14 @@ describe("HandlerRegistry", () => {
     await registry.dispatch(event(Level.Outbox));
     expect(seen).toEqual(["invoice.paid"]);
   });
+
+  it("skips handlers whose level filter excludes the event level", async () => {
+    const registry = new HandlerRegistry();
+    const seen: string[] = [];
+    registry.register((dispatched) => {
+      seen.push(dispatched.name);
+    }, [Level.Broker]);
+    await registry.dispatch(event(Level.InProcess));
+    expect(seen).toEqual([]);
+  });
 });

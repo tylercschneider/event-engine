@@ -25,7 +25,12 @@ export class HandlerRegistry {
 
   async dispatch(event: DispatchedEvent): Promise<void> {
     for (const registration of this.registrations) {
-      await registration.handler(event);
+      if (
+        registration.levels === "all" ||
+        registration.levels.includes(event.level)
+      ) {
+        await registration.handler(event);
+      }
     }
   }
 }
