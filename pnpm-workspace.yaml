@@ -6,5 +6,6 @@ packages:
   - "metrics"
   - "delivery"
   - "dashboards"
+  - "telemetry"
 allowBuilds:
   esbuild: true
