@@ -11,6 +11,8 @@ import {
   mergeSchema,
   dumpSchema,
   loadSchema,
+  checkSchemaDrift,
+  SchemaFileDriftError,
   type ReportEntry,
 } from "../src/index";
 
@@ -183,5 +185,30 @@ describe("@event-engine/core public api", () => {
   it("round-trips a committed schema through dump and load via the package entry", () => {
     const committed = mergeSchema([{ name: "order.placed", shape: "x" }], []);
     expect(loadSchema(dumpSchema(committed))).toEqual(committed);
+  });
+
+  it("detects schema drift for a changed definition through the package entry", () => {
+    const original = defineEvent({
+      name: "order.placed",
+      version: 1,
+      level: Level.Outbox,
+      schema: z.object({ total: z.number() }),
+    });
+    const committed = dumpSchema(
+      mergeSchema([{ name: original.name, shape: original.shape }], []),
+    );
+    const changed = defineEvent({
+      name: "order.placed",
+      version: 1,
+      level: Level.Outbox,
+      schema: z.object({ total: z.string() }),
+    });
+    let caught: unknown;
+    try {
+      checkSchemaDrift(committed, [{ name: changed.name, shape: changed.shape }]);
+    } catch (error) {
+      caught = error;
+    }
+    expect(caught).toBeInstanceOf(SchemaFileDriftError);
   });
 });
