@@ -91,6 +91,10 @@ describe("defineEvent", () => {
     expect(InvoicePaid.fingerprint.length).toBeGreaterThan(0);
   });
 
+  it("exposes a non-empty shape on the definition", () => {
+    expect(InvoicePaid.shape.length).toBeGreaterThan(0);
+  });
+
   it("changes the fingerprint when the schema shape changes", () => {
     const withNumber = defineEvent({
       name: "thing.happened",

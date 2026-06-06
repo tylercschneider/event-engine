@@ -157,4 +157,24 @@ describe("@event-engine/core public api", () => {
     const second = mergeSchema([{ name: "order.placed", shape: "b" }], first);
     expect(second.map((entry) => entry.version)).toEqual([1, 2]);
   });
+
+  it("feeds a definition shape into mergeSchema without bumping on a version change", () => {
+    const v1 = defineEvent({
+      name: "order.shipped",
+      version: 1,
+      level: Level.Outbox,
+      schema: z.object({ id: z.string() }),
+    });
+    const v2 = defineEvent({
+      name: "order.shipped",
+      version: 2,
+      level: Level.Outbox,
+      schema: z.object({ id: z.string() }),
+    });
+    const committed = mergeSchema(
+      [{ name: v2.name, shape: v2.shape }],
+      mergeSchema([{ name: v1.name, shape: v1.shape }], []),
+    );
+    expect(committed.map((entry) => entry.version)).toEqual([1]);
+  });
 });
