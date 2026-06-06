@@ -125,6 +125,37 @@ describe("@event-engine/core public api", () => {
     expect(seen).toEqual(["user.signup"]);
   });
 
+  it("dispatches the full event envelope to handlers through the package entry", async () => {
+    const engine = new EventEngine();
+    let received: unknown;
+    engine.registerHandler((event) => {
+      received = event;
+    }, "all");
+    const Signup = defineEvent({
+      name: "user.signup",
+      version: 2,
+      level: Level.InProcess,
+      schema: z.object({ userId: z.string() }),
+    });
+    await engine.emit(Signup, { userId: "u1" }, "2026-01-01T00:00:00Z", {
+      metadata: { source: "web" },
+      idempotencyKey: "idem-1",
+      aggregateType: "User",
+      aggregateId: "u1",
+      aggregateVersion: 1,
+    });
+    expect(received).toMatchObject({
+      name: "user.signup",
+      type: "user.signup",
+      version: 2,
+      idempotencyKey: "idem-1",
+      metadata: { source: "web" },
+      aggregateType: "User",
+      aggregateId: "u1",
+      aggregateVersion: 1,
+    });
+  });
+
   it("observes emitted events via notifications through the package entry", async () => {
     const engine = new EventEngine();
     const observed: string[] = [];
