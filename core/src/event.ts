@@ -30,14 +30,18 @@ export interface BuildOptions {
 export function defineEvent<Name extends string, Schema extends ZodType>(
   spec: EventSpec<Name, Schema>,
 ) {
-  const shape = JSON.stringify(zodToJsonSchema(spec.schema));
+  const jsonSchema = JSON.stringify(zodToJsonSchema(spec.schema));
   const fingerprint = createHash("sha256")
-    .update(`${spec.name}:${spec.version}:${shape}`)
+    .update(`${spec.name}:${spec.version}:${jsonSchema}`)
+    .digest("hex");
+  const shape = createHash("sha256")
+    .update(`${spec.name}:${jsonSchema}`)
     .digest("hex");
 
   return {
     name: spec.name,
     fingerprint,
+    shape,
     build(
       input: z.input<Schema>,
       occurredAt: string,
