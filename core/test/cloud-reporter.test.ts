@@ -58,6 +58,21 @@ describe("CloudReporter", () => {
     });
   });
 
+  it("never includes the event payload", async () => {
+    const sent: ReportEntry[][] = [];
+    const reporter = new CloudReporter((batch) => {
+      sent.push(batch);
+    });
+    const event = {
+      name: "invoice.paid",
+      occurredAt: "t",
+      payload: { secret: "pii" },
+    };
+    reporter.track("emitted", event);
+    await reporter.flush();
+    expect(sent[0]?.[0]).not.toHaveProperty("payload");
+  });
+
   it("auto-flushes at the batch size", () => {
     const sent: ReportEntry[][] = [];
     const reporter = new CloudReporter((batch) => {
