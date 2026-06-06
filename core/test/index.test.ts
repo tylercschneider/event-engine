@@ -9,6 +9,8 @@ import {
   EventEngine,
   CloudReporter,
   mergeSchema,
+  dumpSchema,
+  loadSchema,
   type ReportEntry,
 } from "../src/index";
 
@@ -176,5 +178,10 @@ describe("@event-engine/core public api", () => {
       mergeSchema([{ name: v1.name, shape: v1.shape }], []),
     );
     expect(committed.map((entry) => entry.version)).toEqual([1]);
+  });
+
+  it("round-trips a committed schema through dump and load via the package entry", () => {
+    const committed = mergeSchema([{ name: "order.placed", shape: "x" }], []);
+    expect(loadSchema(dumpSchema(committed))).toEqual(committed);
   });
 });
