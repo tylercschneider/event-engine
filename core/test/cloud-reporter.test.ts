@@ -38,6 +38,26 @@ describe("CloudReporter", () => {
     expect(sent[0]?.[0]?.idempotencyKey).toBe("idem-1");
   });
 
+  it("reports the aggregate identity as metadata", async () => {
+    const sent: ReportEntry[][] = [];
+    const reporter = new CloudReporter((batch) => {
+      sent.push(batch);
+    });
+    reporter.track("emitted", {
+      name: "invoice.paid",
+      occurredAt: "t",
+      aggregateType: "Invoice",
+      aggregateId: "inv-9",
+      aggregateVersion: 3,
+    });
+    await reporter.flush();
+    expect(sent[0]?.[0]).toMatchObject({
+      aggregateType: "Invoice",
+      aggregateId: "inv-9",
+      aggregateVersion: 3,
+    });
+  });
+
   it("auto-flushes at the batch size", () => {
     const sent: ReportEntry[][] = [];
     const reporter = new CloudReporter((batch) => {

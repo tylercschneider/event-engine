@@ -6,6 +6,9 @@ export interface ReportEntry {
   status: ReportStatus;
   version?: number;
   idempotencyKey?: string;
+  aggregateType?: string;
+  aggregateId?: string;
+  aggregateVersion?: number;
 }
 
 interface ReportableEvent {
@@ -13,6 +16,9 @@ interface ReportableEvent {
   occurredAt: string;
   version?: number;
   idempotencyKey?: string;
+  aggregateType?: string;
+  aggregateId?: string;
+  aggregateVersion?: number;
 }
 
 export type ReportClient = (batch: ReportEntry[]) => void | Promise<void>;
@@ -32,6 +38,9 @@ export class CloudReporter {
       status,
       version: event.version,
       idempotencyKey: event.idempotencyKey,
+      aggregateType: event.aggregateType,
+      aggregateId: event.aggregateId,
+      aggregateVersion: event.aggregateVersion,
     });
     if (this.buffer.length >= this.batchSize) void this.flush();
   }
