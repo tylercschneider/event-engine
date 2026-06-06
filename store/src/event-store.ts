@@ -1,10 +1,11 @@
 import type { AppendOnlyStore } from "@event-engine/ports";
-import type { Handler } from "@event-engine/core";
+import type { Handler, Level } from "@event-engine/core";
 
 export interface StoredEvent {
   name: string;
   occurredAt: string;
   payload: unknown;
+  level?: Level;
   version?: number;
 }
 
