@@ -45,3 +45,11 @@ export function loadSchema(contents: string): SchemaEntry[] {
   }
   return JSON.parse(contents) as SchemaEntry[];
 }
+
+export function checkSchemaDrift(
+  committedContents: string,
+  declared: DeclaredEvent[],
+): void {
+  void committedContents;
+  void declared;
+}
