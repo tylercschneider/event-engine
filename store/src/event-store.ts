@@ -1,10 +1,18 @@
 import type { AppendOnlyStore } from "@event-engine/ports";
-import type { Handler } from "@event-engine/core";
+import type { Handler, Level } from "@event-engine/core";
 
 export interface StoredEvent {
   name: string;
   occurredAt: string;
   payload: unknown;
+  type?: string;
+  level?: Level;
+  version?: number;
+  metadata?: Record<string, unknown>;
+  idempotencyKey?: string;
+  aggregateType?: string;
+  aggregateId?: string;
+  aggregateVersion?: number;
 }
 
 export type Projection = (event: StoredEvent) => void | Promise<void>;

@@ -35,6 +35,90 @@ describe("EventStore recording", () => {
       "invoice.paid",
     ]);
   });
+
+  it("records the event version", async () => {
+    const log = new InMemoryAppendOnlyStore<StoredEvent>();
+    const store = new EventStore(log);
+    await store.recorder()({
+      name: "invoice.paid",
+      level: Level.Outbox,
+      payload: 1,
+      occurredAt: "t",
+      version: 2,
+    });
+    expect((await store.all())[0]?.version).toBe(2);
+  });
+
+  it("records the event level", async () => {
+    const log = new InMemoryAppendOnlyStore<StoredEvent>();
+    const store = new EventStore(log);
+    await store.recorder()({
+      name: "invoice.paid",
+      level: Level.Outbox,
+      payload: 1,
+      occurredAt: "t",
+    });
+    expect((await store.all())[0]?.level).toBe(Level.Outbox);
+  });
+
+  it("records the event type", async () => {
+    const log = new InMemoryAppendOnlyStore<StoredEvent>();
+    const store = new EventStore(log);
+    await store.recorder()({
+      name: "invoice.paid",
+      type: "billing",
+      level: Level.Outbox,
+      payload: 1,
+      occurredAt: "t",
+    });
+    expect((await store.all())[0]?.type).toBe("billing");
+  });
+
+  it("records the event metadata", async () => {
+    const log = new InMemoryAppendOnlyStore<StoredEvent>();
+    const store = new EventStore(log);
+    await store.recorder()({
+      name: "invoice.paid",
+      level: Level.Outbox,
+      payload: 1,
+      occurredAt: "t",
+      metadata: { source: "web" },
+    });
+    expect((await store.all())[0]?.metadata).toEqual({ source: "web" });
+  });
+
+  it("records the idempotency key", async () => {
+    const log = new InMemoryAppendOnlyStore<StoredEvent>();
+    const store = new EventStore(log);
+    await store.recorder()({
+      name: "invoice.paid",
+      level: Level.Outbox,
+      payload: 1,
+      occurredAt: "t",
+      idempotencyKey: "idem-1",
+    });
+    expect((await store.all())[0]?.idempotencyKey).toBe("idem-1");
+  });
+
+  it("records the aggregate identity", async () => {
+    const log = new InMemoryAppendOnlyStore<StoredEvent>();
+    const store = new EventStore(log);
+    await store.recorder()({
+      name: "invoice.paid",
+      level: Level.Outbox,
+      payload: 1,
+      occurredAt: "t",
+      aggregateType: "Invoice",
+      aggregateId: "inv-9",
+      aggregateVersion: 3,
+    });
+    const stored = (await store.all())[0];
+    expect([
+      stored?.aggregateType,
+      stored?.aggregateId,
+      stored?.aggregateVersion,
+    ]).toEqual(["Invoice", "inv-9", 3]);
+  });
 });
 
 describe("EventStore projections", () => {

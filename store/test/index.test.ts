@@ -45,6 +45,34 @@ describe("@event-engine/store public api", () => {
     }).toEqual({ recorded: ["invoice.paid"], projected: ["invoice.paid"] });
   });
 
+  it("records the full event envelope through the package entry", async () => {
+    const log = new InMemoryAppendOnlyStore<StoredEvent>();
+    const store = new EventStore(log);
+    const engine = new EventEngine();
+    engine.registerHandler(store.recorder(), "all");
+    const InvoicePaid = defineEvent({
+      name: "invoice.paid",
+      version: 2,
+      level: Level.Outbox,
+      schema: z.object({ amountCents: z.number() }),
+    });
+    await engine.emit(InvoicePaid, { amountCents: 100 }, "2026-01-01T00:00:00Z", {
+      idempotencyKey: "idem-1",
+      aggregateType: "Invoice",
+      aggregateId: "inv-9",
+      aggregateVersion: 3,
+    });
+    expect((await store.all())[0]).toMatchObject({
+      name: "invoice.paid",
+      version: 2,
+      payload: { amountCents: 100 },
+      idempotencyKey: "idem-1",
+      aggregateType: "Invoice",
+      aggregateId: "inv-9",
+      aggregateVersion: 3,
+    });
+  });
+
   it("rebuilds projection state by replaying recorded events through the entry", async () => {
     const log = new InMemoryAppendOnlyStore<StoredEvent>();
     const store = new EventStore(log);
