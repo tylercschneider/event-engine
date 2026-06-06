@@ -2,6 +2,7 @@ import type { Level } from "./event";
 
 export interface DispatchedEvent {
   name: string;
+  type?: string;
   level: Level;
   payload: unknown;
   occurredAt: string;

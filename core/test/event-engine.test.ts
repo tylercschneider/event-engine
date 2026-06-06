@@ -77,6 +77,16 @@ describe("EventEngine", () => {
     expect(received).toEqual({ source: "web" });
   });
 
+  it("dispatches the event type to handlers", async () => {
+    const engine = new EventEngine();
+    let received: string | undefined;
+    engine.registerHandler((event) => {
+      received = event.type;
+    }, "all");
+    await engine.emit(InvoicePaid, { amountCents: 100 }, "2026-01-01T00:00:00Z");
+    expect(received).toBe("invoice.paid");
+  });
+
   it("fires an emitted notification carrying the built event", async () => {
     const engine = new EventEngine();
     const observed: string[] = [];
