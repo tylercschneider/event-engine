@@ -5,6 +5,7 @@ export interface StoredEvent {
   name: string;
   occurredAt: string;
   payload: unknown;
+  type?: string;
   level?: Level;
   version?: number;
 }

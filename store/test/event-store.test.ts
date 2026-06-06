@@ -60,6 +60,19 @@ describe("EventStore recording", () => {
     });
     expect((await store.all())[0]?.level).toBe(Level.Outbox);
   });
+
+  it("records the event type", async () => {
+    const log = new InMemoryAppendOnlyStore<StoredEvent>();
+    const store = new EventStore(log);
+    await store.recorder()({
+      name: "invoice.paid",
+      type: "billing",
+      level: Level.Outbox,
+      payload: 1,
+      occurredAt: "t",
+    });
+    expect((await store.all())[0]?.type).toBe("billing");
+  });
 });
 
 describe("EventStore projections", () => {
