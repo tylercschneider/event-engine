@@ -1,4 +1,7 @@
 import { describe, it, expect } from "vitest";
+import { mkdtempSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { z } from "zod";
 import {
   defineEvent,
@@ -14,6 +17,7 @@ import {
   checkSchemaDrift,
   SchemaFileDriftError,
   createSchemaCli,
+  createNodeEffects,
   type ReportEntry,
 } from "../src/index";
 
@@ -231,5 +235,21 @@ describe("@event-engine/core public api", () => {
     const cli = createSchemaCli([OrderPlaced], effects);
     cli.run(["node", "schema", "dump"]);
     expect(cli.run(["node", "schema", "check"])).toBe(0);
+  });
+
+  it("dumps and checks against the real filesystem through the package entry", () => {
+    const path = join(
+      mkdtempSync(join(tmpdir(), "event-schema-")),
+      "schema.json",
+    );
+    const OrderPlaced = defineEvent({
+      name: "order.placed",
+      version: 1,
+      level: Level.Outbox,
+      schema: z.object({ total: z.number() }),
+    });
+    const cli = createSchemaCli([OrderPlaced], createNodeEffects());
+    cli.run(["node", "schema", "dump", path]);
+    expect(cli.run(["node", "schema", "check", path])).toBe(0);
   });
 });

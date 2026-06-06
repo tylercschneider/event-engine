@@ -44,6 +44,34 @@ engine.notifications.on("emitted", (event) => logger.info(event.name));
 
 A typed pub/sub bus (`Notifications<Channels>`) — the analog of `ActiveSupport::Notifications`. Core fires `emitted`; other packages fire their own channels.
 
+## Schema-file workflow
+
+Each definition also carries a version-independent **`shape`** (sha256 of `name:json-schema`, no version), so a definition is structurally a `{ name, shape }` and can drive auto-versioning:
+
+- **`mergeSchema(declared, committed)`** — append-only auto-versioning: a new event gets version 1; a changed shape gets a new version while keeping the prior ones.
+- **`dumpSchema(entries)` / `loadSchema(contents)`** — serialize the committed schema to JSON (ordered by name then version) and parse it back; blank contents load as an empty schema.
+- **`checkSchemaDrift(committedContents, declared)`** — throws `SchemaFileDriftError` when the committed schema is out of date (i.e. re-dumping would change it). The committed-file analog of the in-memory `EventRegistry` `SchemaDriftError`.
+
+### The `schema` CLI
+
+`createSchemaCli(definitions, effects)` provides `dump` and `check` over an injected I/O seam (`SchemaCliEffects { readFile, writeFile, log }`); `createNodeEffects()` supplies the real `node:fs`/`console` implementation. Wire a thin bin in your own project — it hands the CLI the definitions it already holds:
+
+```ts
+#!/usr/bin/env node
+import { createSchemaCli, createNodeEffects } from "@event-engine/core";
+import { OrderPlaced, OrderShipped } from "../src/events";
+
+const code = createSchemaCli([OrderPlaced, OrderShipped], createNodeEffects()).run(
+  process.argv,
+);
+process.exit(code);
+```
+
+```
+schema dump [path]    # regenerate ./event-schema.json (default path)
+schema check [path]   # exit 1 + remediation log if the committed schema drifted
+```
+
 ## Status
 
-Real and TDD-tested. The schema-file generate/load/dump workflow and auto-versioning-by-fingerprint (in the Ruby core) are not yet ported.
+Real and TDD-tested, including the schema-file generate/load/dump workflow, auto-versioning by shape, drift detection, and the `schema` CLI.

@@ -21,4 +21,5 @@ export {
 } from "./schema";
 export { createSchemaCli } from "./schema-cli";
 export type { SchemaCliDefinition, SchemaCliEffects } from "./schema-cli";
+export { createNodeEffects } from "./schema-cli-node";
 export type { SchemaEntry, DeclaredEvent } from "./schema";
