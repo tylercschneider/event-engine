@@ -31,3 +31,10 @@ export function mergeSchema(
   }
   return result;
 }
+
+export function dumpSchema(entries: SchemaEntry[]): string {
+  const sorted = [...entries].sort(
+    (a, b) => a.name.localeCompare(b.name) || a.version - b.version,
+  );
+  return `${JSON.stringify(sorted, null, 2)}\n`;
+}
