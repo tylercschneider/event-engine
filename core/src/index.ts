@@ -19,4 +19,6 @@ export {
   checkSchemaDrift,
   SchemaFileDriftError,
 } from "./schema";
+export { createSchemaCli } from "./schema-cli";
+export type { SchemaCliDefinition, SchemaCliEffects } from "./schema-cli";
 export type { SchemaEntry, DeclaredEvent } from "./schema";

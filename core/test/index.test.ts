@@ -13,6 +13,7 @@ import {
   loadSchema,
   checkSchemaDrift,
   SchemaFileDriftError,
+  createSchemaCli,
   type ReportEntry,
 } from "../src/index";
 
@@ -210,5 +211,25 @@ describe("@event-engine/core public api", () => {
       caught = error;
     }
     expect(caught).toBeInstanceOf(SchemaFileDriftError);
+  });
+
+  it("dumps then checks a definition with no drift through the package entry", () => {
+    const files: Record<string, string> = {};
+    const effects = {
+      readFile: (path: string) => files[path] ?? "",
+      writeFile: (path: string, contents: string) => {
+        files[path] = contents;
+      },
+      log: () => undefined,
+    };
+    const OrderPlaced = defineEvent({
+      name: "order.placed",
+      version: 1,
+      level: Level.Outbox,
+      schema: z.object({ total: z.number() }),
+    });
+    const cli = createSchemaCli([OrderPlaced], effects);
+    cli.run(["node", "schema", "dump"]);
+    expect(cli.run(["node", "schema", "check"])).toBe(0);
   });
 });
