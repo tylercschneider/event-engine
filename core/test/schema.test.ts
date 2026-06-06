@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { mergeSchema, dumpSchema, loadSchema } from "../src/schema";
+import type { SchemaEntry } from "../src/schema";
 
 describe("mergeSchema", () => {
   it("assigns version 1 to a new event", () => {
@@ -25,6 +26,19 @@ describe("dumpSchema", () => {
     expect(JSON.parse(dumped)).toEqual([
       { name: "order.placed", version: 1, shape: "x" },
     ]);
+  });
+
+  it("orders entries by name then version", () => {
+    const dumped = dumpSchema([
+      { name: "order.shipped", version: 1, shape: "s" },
+      { name: "order.placed", version: 2, shape: "p2" },
+      { name: "order.placed", version: 1, shape: "p1" },
+    ]);
+    expect(
+      (JSON.parse(dumped) as SchemaEntry[]).map(
+        (entry) => `${entry.name}:${entry.version}`,
+      ),
+    ).toEqual(["order.placed:1", "order.placed:2", "order.shipped:1"]);
   });
 });
 
