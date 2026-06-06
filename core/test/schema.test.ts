@@ -4,6 +4,7 @@ import {
   dumpSchema,
   loadSchema,
   checkSchemaDrift,
+  SchemaFileDriftError,
 } from "../src/schema";
 import type { SchemaEntry } from "../src/schema";
 
@@ -65,5 +66,16 @@ describe("checkSchemaDrift", () => {
     const declared = [{ name: "order.placed", shape: "x" }];
     const committed = dumpSchema(mergeSchema(declared, []));
     expect(() => checkSchemaDrift(committed, declared)).not.toThrow();
+  });
+
+  it("raises drift when a declared event is missing from the committed contents", () => {
+    const committed = dumpSchema([{ name: "order.placed", version: 1, shape: "x" }]);
+    let caught: unknown;
+    try {
+      checkSchemaDrift(committed, [{ name: "order.shipped", shape: "y" }]);
+    } catch (error) {
+      caught = error;
+    }
+    expect(caught).toBeInstanceOf(SchemaFileDriftError);
   });
 });
