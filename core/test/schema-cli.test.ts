@@ -66,4 +66,13 @@ describe("createSchemaCli", () => {
     ]);
     expect(effects.logs.some((line) => line.includes("dump"))).toBe(true);
   });
+
+  it("returns a nonzero exit code for an unknown command", () => {
+    const effects = fakeEffects();
+    const code = createSchemaCli(
+      [{ name: "order.placed", shape: "x" }],
+      effects,
+    ).run(["node", "schema", "frobnicate"]);
+    expect(code).toBe(1);
+  });
 });

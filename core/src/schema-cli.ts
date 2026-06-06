@@ -52,7 +52,7 @@ export function createSchemaCli(
           throw error;
         }
       }
-      return 0;
+      return 1;
     },
   };
 }
