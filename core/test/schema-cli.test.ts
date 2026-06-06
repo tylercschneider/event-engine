@@ -42,7 +42,7 @@ describe("createSchemaCli", () => {
       "dump",
     ]);
     expect(
-      loadSchema(effects.files["./event-schema.json"]).map(
+      loadSchema(effects.readFile("./event-schema.json")).map(
         (entry) => entry.version,
       ),
     ).toEqual([1, 2]);
