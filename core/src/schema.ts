@@ -40,5 +40,8 @@ export function dumpSchema(entries: SchemaEntry[]): string {
 }
 
 export function loadSchema(contents: string): SchemaEntry[] {
+  if (contents.trim() === "") {
+    return [];
+  }
   return JSON.parse(contents) as SchemaEntry[];
 }

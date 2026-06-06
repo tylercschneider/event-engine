@@ -35,4 +35,8 @@ describe("loadSchema", () => {
       { name: "order.placed", version: 1, shape: "x" },
     ]);
   });
+
+  it("treats blank contents as an empty schema", () => {
+    expect(loadSchema("   \n")).toEqual([]);
+  });
 });
