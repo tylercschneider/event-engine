@@ -5,12 +5,14 @@ export interface ReportEntry {
   occurredAt: string;
   status: ReportStatus;
   version?: number;
+  idempotencyKey?: string;
 }
 
 interface ReportableEvent {
   name: string;
   occurredAt: string;
   version?: number;
+  idempotencyKey?: string;
 }
 
 export type ReportClient = (batch: ReportEntry[]) => void | Promise<void>;
@@ -29,6 +31,7 @@ export class CloudReporter {
       occurredAt: event.occurredAt,
       status,
       version: event.version,
+      idempotencyKey: event.idempotencyKey,
     });
     if (this.buffer.length >= this.batchSize) void this.flush();
   }
