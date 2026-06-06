@@ -38,3 +38,7 @@ export function dumpSchema(entries: SchemaEntry[]): string {
   );
   return `${JSON.stringify(sorted, null, 2)}\n`;
 }
+
+export function loadSchema(contents: string): SchemaEntry[] {
+  return JSON.parse(contents) as SchemaEntry[];
+}
