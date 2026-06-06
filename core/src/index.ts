@@ -12,5 +12,11 @@ export { Notifications } from "./notifications";
 export type { NotificationListener } from "./notifications";
 export { CloudReporter } from "./cloud-reporter";
 export type { ReportEntry, ReportClient, ReportStatus } from "./cloud-reporter";
-export { mergeSchema, dumpSchema, loadSchema } from "./schema";
+export {
+  mergeSchema,
+  dumpSchema,
+  loadSchema,
+  checkSchemaDrift,
+  SchemaFileDriftError,
+} from "./schema";
 export type { SchemaEntry, DeclaredEvent } from "./schema";

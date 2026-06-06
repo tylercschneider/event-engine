@@ -45,3 +45,21 @@ export function loadSchema(contents: string): SchemaEntry[] {
   }
   return JSON.parse(contents) as SchemaEntry[];
 }
+
+export class SchemaFileDriftError extends Error {
+  constructor() {
+    super("committed schema is out of date; re-dump and commit it");
+    this.name = "SchemaFileDriftError";
+  }
+}
+
+export function checkSchemaDrift(
+  committedContents: string,
+  declared: DeclaredEvent[],
+): void {
+  const committed = loadSchema(committedContents);
+  const expected = dumpSchema(mergeSchema(declared, committed));
+  if (committedContents !== expected) {
+    throw new SchemaFileDriftError();
+  }
+}
