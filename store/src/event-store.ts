@@ -9,6 +9,7 @@ export interface StoredEvent {
   level?: Level;
   version?: number;
   metadata?: Record<string, unknown>;
+  idempotencyKey?: string;
 }
 
 export type Projection = (event: StoredEvent) => void | Promise<void>;

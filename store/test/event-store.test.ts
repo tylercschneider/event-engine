@@ -86,6 +86,19 @@ describe("EventStore recording", () => {
     });
     expect((await store.all())[0]?.metadata).toEqual({ source: "web" });
   });
+
+  it("records the idempotency key", async () => {
+    const log = new InMemoryAppendOnlyStore<StoredEvent>();
+    const store = new EventStore(log);
+    await store.recorder()({
+      name: "invoice.paid",
+      level: Level.Outbox,
+      payload: 1,
+      occurredAt: "t",
+      idempotencyKey: "idem-1",
+    });
+    expect((await store.all())[0]?.idempotencyKey).toBe("idem-1");
+  });
 });
 
 describe("EventStore projections", () => {
