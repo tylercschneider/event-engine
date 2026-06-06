@@ -2,9 +2,16 @@ import type { Level } from "./event";
 
 export interface DispatchedEvent {
   name: string;
+  type?: string;
   level: Level;
   payload: unknown;
   occurredAt: string;
+  version?: number;
+  metadata?: Record<string, unknown>;
+  idempotencyKey?: string;
+  aggregateType?: string;
+  aggregateId?: string;
+  aggregateVersion?: number;
 }
 
 export type Handler = (event: DispatchedEvent) => void | Promise<void>;
