@@ -192,6 +192,38 @@ describe("@event-engine/core public api", () => {
     expect(sent[0]?.[0]).toMatchObject({ name: "user.signup", status: "emitted" });
   });
 
+  it("reports the full event metadata to the cloud client through the package entry", async () => {
+    const engine = new EventEngine();
+    const sent: ReportEntry[][] = [];
+    const reporter = new CloudReporter((batch) => {
+      sent.push(batch);
+    });
+    engine.notifications.on("emitted", (event) => {
+      reporter.track("emitted", event);
+    });
+    const Signup = defineEvent({
+      name: "user.signup",
+      version: 3,
+      level: Level.InProcess,
+      schema: z.object({ userId: z.string() }),
+    });
+    await engine.emit(Signup, { userId: "u1" }, "2026-01-01T00:00:00Z", {
+      idempotencyKey: "idem-1",
+      aggregateType: "User",
+      aggregateId: "u1",
+      aggregateVersion: 2,
+    });
+    await reporter.flush();
+    expect(sent[0]?.[0]).toMatchObject({
+      name: "user.signup",
+      version: 3,
+      idempotencyKey: "idem-1",
+      aggregateType: "User",
+      aggregateId: "u1",
+      aggregateVersion: 2,
+    });
+  });
+
   it("auto-versions a changed event across merges through the package entry", () => {
     const first = mergeSchema([{ name: "order.placed", shape: "a" }], []);
     const second = mergeSchema([{ name: "order.placed", shape: "b" }], first);
