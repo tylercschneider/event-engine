@@ -47,4 +47,13 @@ describe("createSchemaCli", () => {
       ),
     ).toEqual([1, 2]);
   });
+
+  it("returns a nonzero exit code when check finds drift", () => {
+    const effects = fakeEffects();
+    const code = createSchemaCli(
+      [{ name: "order.placed", shape: "x" }],
+      effects,
+    ).run(["node", "schema", "check"]);
+    expect(code).toBe(1);
+  });
 });

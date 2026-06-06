@@ -1,4 +1,10 @@
-import { mergeSchema, dumpSchema, loadSchema } from "./schema";
+import {
+  mergeSchema,
+  dumpSchema,
+  loadSchema,
+  checkSchemaDrift,
+  SchemaFileDriftError,
+} from "./schema";
 import type { DeclaredEvent } from "./schema";
 
 export interface SchemaCliDefinition {
@@ -31,6 +37,17 @@ export function createSchemaCli(
         const committed = loadSchema(effects.readFile(path));
         effects.writeFile(path, dumpSchema(mergeSchema(declared, committed)));
         return 0;
+      }
+      if (command === "check") {
+        try {
+          checkSchemaDrift(effects.readFile(path), declared);
+          return 0;
+        } catch (error) {
+          if (error instanceof SchemaFileDriftError) {
+            return 1;
+          }
+          throw error;
+        }
       }
       return 0;
     },
