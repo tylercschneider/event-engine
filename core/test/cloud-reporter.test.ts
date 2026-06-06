@@ -14,6 +14,16 @@ describe("CloudReporter", () => {
     ]);
   });
 
+  it("reports the event version as metadata", async () => {
+    const sent: ReportEntry[][] = [];
+    const reporter = new CloudReporter((batch) => {
+      sent.push(batch);
+    });
+    reporter.track("emitted", { name: "invoice.paid", occurredAt: "t", version: 2 });
+    await reporter.flush();
+    expect(sent[0]?.[0]?.version).toBe(2);
+  });
+
   it("auto-flushes at the batch size", () => {
     const sent: ReportEntry[][] = [];
     const reporter = new CloudReporter((batch) => {
