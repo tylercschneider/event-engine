@@ -65,6 +65,18 @@ describe("EventEngine", () => {
     });
   });
 
+  it("dispatches the event metadata to handlers", async () => {
+    const engine = new EventEngine();
+    let received: Record<string, unknown> | undefined;
+    engine.registerHandler((event) => {
+      received = event.metadata;
+    }, "all");
+    await engine.emit(InvoicePaid, { amountCents: 100 }, "2026-01-01T00:00:00Z", {
+      metadata: { source: "web" },
+    });
+    expect(received).toEqual({ source: "web" });
+  });
+
   it("fires an emitted notification carrying the built event", async () => {
     const engine = new EventEngine();
     const observed: string[] = [];

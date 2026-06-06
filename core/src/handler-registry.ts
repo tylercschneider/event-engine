@@ -6,6 +6,7 @@ export interface DispatchedEvent {
   payload: unknown;
   occurredAt: string;
   version?: number;
+  metadata?: Record<string, unknown>;
   idempotencyKey?: string;
   aggregateType?: string;
   aggregateId?: string;
