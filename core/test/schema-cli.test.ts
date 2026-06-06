@@ -75,4 +75,18 @@ describe("createSchemaCli", () => {
     ).run(["node", "schema", "frobnicate"]);
     expect(code).toBe(1);
   });
+
+  it("logs usage listing the available commands for an unknown command", () => {
+    const effects = fakeEffects();
+    createSchemaCli([{ name: "order.placed", shape: "x" }], effects).run([
+      "node",
+      "schema",
+      "frobnicate",
+    ]);
+    expect(
+      effects.logs.some(
+        (line) => line.includes("dump") && line.includes("check"),
+      ),
+    ).toBe(true);
+  });
 });

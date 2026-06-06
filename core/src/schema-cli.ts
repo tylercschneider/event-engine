@@ -52,6 +52,7 @@ export function createSchemaCli(
           throw error;
         }
       }
+      effects.log("usage: schema <dump|check> [path]");
       return 1;
     },
   };
