@@ -1,6 +1,6 @@
 # @event-engine/telemetry
 
-The high-volume, fire-and-forget sink for level-0 signals (page views, clicks). The deliberate opposite of `@event-engine/delivery`: no transaction, no outbox, no per-event durability — just cheap, batched throughput. Zero runtime dependencies.
+The high-volume, fire-and-forget sink for signals (page views, clicks). Its own data system, orthogonal to the durability ladder — not a level. The deliberate opposite of `@event-engine/delivery`: no transaction, no outbox, no per-event durability — just cheap, batched throughput. Zero runtime dependencies.
 
 ## The batching collector
 
@@ -33,4 +33,4 @@ sink.columns; // queryable columnar layout — the reference for a Parquet/lake 
 
 ## Status
 
-Real and TDD-tested. A real columnar/lake sink adapter is the production gap. Shares `@event-engine/core` event definitions (a level-0 event is still a defined event) but pulls in **none** of the delivery machinery.
+Real and TDD-tested. A real columnar/lake sink adapter is the production gap. Shares `@event-engine/core` event definitions (any defined event, at any level, can feed it) but pulls in **none** of the delivery machinery.

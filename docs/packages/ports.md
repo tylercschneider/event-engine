@@ -38,7 +38,7 @@ interface JobQueue {
   process<P>(name: string, handler: (payload: P) => Promise<void>): void;
 }
 ```
-`InlineJobQueue` runs handlers synchronously on enqueue — the right default for tests and level-0/1 delivery; a BullMQ adapter would back level 2+.
+`InlineJobQueue` runs handlers synchronously on enqueue — the right default for tests and level-1 delivery; a Postgres- or BullMQ-backed adapter would back level 2+.
 
 ## Status
 

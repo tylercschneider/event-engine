@@ -14,7 +14,7 @@ describe("@event-engine/telemetry public api", () => {
     const PageView = defineEvent({
       name: "page.view",
       version: 1,
-      level: Level.Telemetry,
+      level: Level.InProcess,
       schema: z.object({ path: z.string() }),
     });
     const batches: Signal[][] = [];
