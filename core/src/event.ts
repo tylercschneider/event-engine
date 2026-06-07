@@ -3,7 +3,6 @@ import { zodToJsonSchema } from "zod-to-json-schema";
 import type { z, ZodType } from "zod";
 
 export enum Level {
-  Telemetry = 0,
   InProcess = 1,
   Background = 2,
   Outbox = 3,
