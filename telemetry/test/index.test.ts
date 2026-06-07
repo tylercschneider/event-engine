@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { z } from "zod";
-import { defineEvent, Level } from "@event-engine/core";
+import { defineEvent } from "@event-engine/core";
 import {
   Collector,
   collectorHandler,
@@ -14,7 +14,7 @@ describe("@event-engine/telemetry public api", () => {
     const PageView = defineEvent({
       name: "page.view",
       version: 1,
-      level: Level.InProcess,
+      delivery: "inline",
       schema: z.object({ path: z.string() }),
     });
     const batches: Signal[][] = [];

@@ -1,12 +1,12 @@
 import { describe, it, expect } from "vitest";
 import { z } from "zod";
 import { EventEngine } from "../src/event-engine";
-import { defineEvent, Level } from "../src/event";
+import { defineEvent } from "../src/event";
 
 const InvoicePaid = defineEvent({
   name: "invoice.paid",
   version: 1,
-  level: Level.Outbox,
+  delivery: "durable",
   schema: z.object({ amountCents: z.number() }),
 });
 

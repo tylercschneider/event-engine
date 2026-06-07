@@ -5,7 +5,7 @@ import { defineEvent, Level } from "../src/event";
 const InvoicePaid = defineEvent({
   name: "invoice.paid",
   version: 1,
-  level: Level.Outbox,
+  delivery: "durable",
   schema: z.object({ amountCents: z.number() }),
 });
 
@@ -59,6 +59,21 @@ describe("defineEvent", () => {
     expect(event.idempotencyKey).toBeUndefined();
   });
 
+  it("resolves capabilities from a delivery preset", () => {
+    const Published = defineEvent({
+      name: "thing.published",
+      version: 1,
+      delivery: "broker",
+      schema: z.object({ id: z.string() }),
+    });
+    const event = Published.build({ id: "x" }, "2026-01-01T00:00:00Z");
+    expect(event.capabilities).toEqual({
+      backgrounded: true,
+      durable: true,
+      broker: true,
+    });
+  });
+
   it("resolves delivery capabilities from the level", () => {
     const event = InvoicePaid.build({ amountCents: 100 }, "2026-01-01T00:00:00Z");
     expect(event.capabilities).toEqual({
@@ -110,13 +125,13 @@ describe("defineEvent", () => {
     const withNumber = defineEvent({
       name: "thing.happened",
       version: 1,
-      level: Level.InProcess,
+      delivery: "inline",
       schema: z.object({ value: z.number() }),
     });
     const withString = defineEvent({
       name: "thing.happened",
       version: 1,
-      level: Level.InProcess,
+      delivery: "inline",
       schema: z.object({ value: z.string() }),
     });
     expect(withNumber.fingerprint).not.toBe(withString.fingerprint);
@@ -126,13 +141,13 @@ describe("defineEvent", () => {
     const v1 = defineEvent({
       name: "thing.happened",
       version: 1,
-      level: Level.InProcess,
+      delivery: "inline",
       schema: z.object({ value: z.number() }),
     });
     const v2 = defineEvent({
       name: "thing.happened",
       version: 2,
-      level: Level.InProcess,
+      delivery: "inline",
       schema: z.object({ value: z.number() }),
     });
     expect(v1.fingerprint).not.toBe(v2.fingerprint);

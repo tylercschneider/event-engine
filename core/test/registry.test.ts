@@ -1,12 +1,12 @@
 import { describe, it, expect } from "vitest";
 import { z } from "zod";
-import { defineEvent, Level } from "../src/event";
+import { defineEvent } from "../src/event";
 import { EventRegistry, SchemaDriftError } from "../src/registry";
 
 const InvoicePaid = defineEvent({
   name: "invoice.paid",
   version: 1,
-  level: Level.Outbox,
+  delivery: "durable",
   schema: z.object({ amountCents: z.number() }),
 });
 
@@ -29,13 +29,13 @@ describe("EventRegistry", () => {
     const original = defineEvent({
       name: "report.run",
       version: 1,
-      level: Level.InProcess,
+      delivery: "inline",
       schema: z.object({ rows: z.number() }),
     });
     const drifted = defineEvent({
       name: "report.run",
       version: 1,
-      level: Level.InProcess,
+      delivery: "inline",
       schema: z.object({ rows: z.string() }),
     });
     registry.register(original);

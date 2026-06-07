@@ -3,6 +3,7 @@ import { zodToJsonSchema } from "zod-to-json-schema";
 import type { z, ZodType } from "zod";
 import { capabilitiesFor } from "./capabilities";
 import { Level } from "./level";
+import { levelForPreset, type DeliveryPreset } from "./delivery-preset";
 
 export { Level };
 
@@ -10,7 +11,7 @@ interface EventSpec<Name extends string, Schema extends ZodType> {
   name: Name;
   type?: string;
   version: number;
-  level: Level;
+  delivery: DeliveryPreset;
   schema: Schema;
 }
 
@@ -33,6 +34,8 @@ export function defineEvent<Name extends string, Schema extends ZodType>(
     .update(`${spec.name}:${jsonSchema}`)
     .digest("hex");
 
+  const level = levelForPreset(spec.delivery);
+
   return {
     name: spec.name,
     fingerprint,
@@ -47,8 +50,8 @@ export function defineEvent<Name extends string, Schema extends ZodType>(
         name: spec.name,
         type: spec.type ?? spec.name,
         version: spec.version,
-        level: spec.level,
-        capabilities: capabilitiesFor(spec.level),
+        level,
+        capabilities: capabilitiesFor(level),
         payload: Object.freeze(spec.schema.parse(input)) as Readonly<z.output<Schema>>,
         occurredAt,
         metadata: options.metadata ?? {},

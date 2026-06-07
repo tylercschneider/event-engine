@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { z } from "zod";
-import { defineEvent, Level, EventEngine } from "@event-engine/core";
+import { defineEvent, EventEngine } from "@event-engine/core";
 import { InMemoryAppendOnlyStore } from "@event-engine/ports";
 import { EventStore, type StoredEvent } from "../src/index";
 
@@ -9,7 +9,7 @@ describe("@event-engine/store public api", () => {
     const InvoicePaid = defineEvent({
       name: "invoice.paid",
       version: 1,
-      level: Level.Outbox,
+      delivery: "durable",
       schema: z.object({ amountCents: z.number() }),
     });
     const log = new InMemoryAppendOnlyStore<StoredEvent>();
@@ -34,7 +34,7 @@ describe("@event-engine/store public api", () => {
     const InvoicePaid = defineEvent({
       name: "invoice.paid",
       version: 1,
-      level: Level.Outbox,
+      delivery: "durable",
       schema: z.object({ amountCents: z.number() }),
     });
     await engine.emit(InvoicePaid, { amountCents: 100 }, "2026-01-01T00:00:00Z");
@@ -53,7 +53,7 @@ describe("@event-engine/store public api", () => {
     const InvoicePaid = defineEvent({
       name: "invoice.paid",
       version: 2,
-      level: Level.Outbox,
+      delivery: "durable",
       schema: z.object({ amountCents: z.number() }),
     });
     await engine.emit(InvoicePaid, { amountCents: 100 }, "2026-01-01T00:00:00Z", {
