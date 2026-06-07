@@ -1,10 +1,12 @@
 import type { Level } from "./event";
+import type { Capabilities } from "./capabilities";
 
 export interface DispatchedEvent {
   name: string;
   eventId?: string;
   type?: string;
   level: Level;
+  capabilities?: Capabilities;
   payload: unknown;
   occurredAt: string;
   version?: number;
