@@ -60,11 +60,10 @@ await engine.emit(InvoicePaid, { amountCents: 100 }, occurredAt);
 
 ## The level ladder
 
-Each event **declares** a durability level; `delivery` **routes** on it. (Levels 1–5 mirror the Ruby gem; level 0 is a TypeScript-only extension for telemetry.)
+Each event **declares** a durability level; `delivery` **routes** on it. Each rung adds infrastructure and a stronger guarantee than the one below it.
 
 | Level | Name | Behavior |
 |---|---|---|
-| 0 | `Telemetry` | fire-and-forget, anonymous, high-volume (the `@event-engine/telemetry` path; not in the Ruby gem) |
 | 1 | `InProcess` | subscribers run **synchronously** in the caller's stack |
 | 2 | `Background` | subscribers run in a **background job** |
 | 3 | `Outbox` | durable; recorded to the outbox, drained by the publisher |
@@ -78,7 +77,7 @@ A `HandlerRegistry` registration carries a level filter (`"all"` or an explicit 
 - **`@event-engine/ports`** is the substrate the Ruby version gets from Rails (ActiveRecord, ActiveJob): storage, transactions, and a job queue, as small interfaces with in-memory reference adapters. Everything DB/job-bound binds through it instead of a concrete database.
 - **`@event-engine/store`** registers a `Recorder` + `ProjectionDispatcher` into the engine. The recorder appends to an `AppendOnlyStore` (a port); projections fan out, isolated so one failure doesn't break the rest. `replay` walks the whole log to rebuild state.
 - **`@event-engine/delivery`** registers one level-routing `Handler`. Durable levels write to a stateful `OutboxStore` (pending → published/dead-lettered); an `OutboxPublisher` drains it through a transport; an `OutboxDashboard` exposes the state and recovery (retry); the `retrying` decorator adds retry + dead-letter.
-- **`@event-engine/telemetry`** is the opposite of delivery: a batching `Collector` → columnar `Sink`, zero durability, zero dependencies.
+- **`@event-engine/telemetry`** is its own data system, orthogonal to the durability ladder — not a level. Any event (at any level), or a raw posted signal, can feed a batching `Collector` → columnar `Sink`; zero durability, zero dependencies.
 - **`@event-engine/metrics`** turns recorded events into numbers (measures, rollups, mergeable sketches, a sandboxed expression DSL).
 - **`@event-engine/stats`** is the display contract: a self-describing stat with a normalized result shape (`scalar`/`series`/`breakdown`) and a `StatSource` port.
 - **`@event-engine/dashboards`** is headless dashboards-as-data: it resolves a dashboard config against a `DataProvider` into plain JSON; any frontend renders it.
