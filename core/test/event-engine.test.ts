@@ -21,6 +21,16 @@ describe("EventEngine", () => {
     expect(seen).toEqual(["invoice.paid"]);
   });
 
+  it("dispatches the event id to handlers", async () => {
+    const engine = new EventEngine();
+    let received: string | undefined;
+    engine.registerHandler((event) => {
+      received = event.eventId;
+    }, "all");
+    await engine.emit(InvoicePaid, { amountCents: 100 }, "2026-01-01T00:00:00Z");
+    expect(received?.length).toBeGreaterThan(0);
+  });
+
   it("dispatches the event version to handlers", async () => {
     const engine = new EventEngine();
     let received: number | undefined;

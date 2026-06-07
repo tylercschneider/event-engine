@@ -59,6 +59,12 @@ describe("defineEvent", () => {
     expect(event.idempotencyKey).toBeUndefined();
   });
 
+  it("generates a distinct event id for each build", () => {
+    const first = InvoicePaid.build({ amountCents: 100 }, "2026-01-01T00:00:00Z");
+    const second = InvoicePaid.build({ amountCents: 100 }, "2026-01-01T00:00:00Z");
+    expect(first.eventId).not.toBe(second.eventId);
+  });
+
   it("carries provided idempotency key and aggregate fields from options", () => {
     const event = InvoicePaid.build({ amountCents: 100 }, "2026-01-01T00:00:00Z", {
       idempotencyKey: "idem-1",
