@@ -1,4 +1,4 @@
-import { createHash } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import type { z, ZodType } from "zod";
 
@@ -47,6 +47,7 @@ export function defineEvent<Name extends string, Schema extends ZodType>(
       options: BuildOptions = {},
     ) {
       return {
+        eventId: randomUUID(),
         name: spec.name,
         type: spec.type ?? spec.name,
         version: spec.version,
