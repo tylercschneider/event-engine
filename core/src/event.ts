@@ -1,14 +1,10 @@
 import { createHash, randomUUID } from "node:crypto";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import type { z, ZodType } from "zod";
+import { capabilitiesFor } from "./capabilities";
+import { Level } from "./level";
 
-export enum Level {
-  InProcess = 1,
-  Background = 2,
-  Outbox = 3,
-  Broker = 4,
-  EventSourcing = 5,
-}
+export { Level };
 
 interface EventSpec<Name extends string, Schema extends ZodType> {
   name: Name;
@@ -52,6 +48,7 @@ export function defineEvent<Name extends string, Schema extends ZodType>(
         type: spec.type ?? spec.name,
         version: spec.version,
         level: spec.level,
+        capabilities: capabilitiesFor(spec.level),
         payload: Object.freeze(spec.schema.parse(input)) as Readonly<z.output<Schema>>,
         occurredAt,
         metadata: options.metadata ?? {},

@@ -1,4 +1,4 @@
-import { Level } from "./event";
+import { Level } from "./level";
 
 export interface Capabilities {
   backgrounded: boolean;

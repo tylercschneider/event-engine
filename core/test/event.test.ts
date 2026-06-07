@@ -59,6 +59,15 @@ describe("defineEvent", () => {
     expect(event.idempotencyKey).toBeUndefined();
   });
 
+  it("resolves delivery capabilities from the level", () => {
+    const event = InvoicePaid.build({ amountCents: 100 }, "2026-01-01T00:00:00Z");
+    expect(event.capabilities).toEqual({
+      backgrounded: true,
+      durable: true,
+      broker: false,
+    });
+  });
+
   it("generates a distinct event id for each build", () => {
     const first = InvoicePaid.build({ amountCents: 100 }, "2026-01-01T00:00:00Z");
     const second = InvoicePaid.build({ amountCents: 100 }, "2026-01-01T00:00:00Z");
