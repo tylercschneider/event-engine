@@ -172,6 +172,21 @@ describe("@event-engine/core public api", () => {
     expect(observed).toEqual(["user.signup"]);
   });
 
+  it("resolves delivery capabilities on a defined event through the package entry", () => {
+    const Signup = defineEvent({
+      name: "user.signup",
+      version: 1,
+      level: Level.Background,
+      schema: z.object({ userId: z.string() }),
+    });
+    const event = Signup.build({ userId: "u1" }, "2026-01-01T00:00:00Z");
+    expect(event.capabilities).toEqual({
+      backgrounded: true,
+      durable: false,
+      broker: false,
+    });
+  });
+
   it("carries a correlation event id on the emitted notification through the package entry", async () => {
     const engine = new EventEngine();
     let observed: string | undefined;
