@@ -9,7 +9,7 @@ const InvoicePaid = defineEvent({
   name: "invoice.paid",
   type: "billing",      // optional; defaults to name
   version: 1,
-  level: Level.Outbox,
+  delivery: "durable",  // inline | background | durable | broker
   schema: z.object({ amountCents: z.number() }),
 });
 ```

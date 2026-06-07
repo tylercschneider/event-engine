@@ -6,12 +6,12 @@ This walks through the core flow end to end: define an event, wire an `EventEngi
 
 ```ts
 import { z } from "zod";
-import { defineEvent, Level } from "@event-engine/core";
+import { defineEvent } from "@event-engine/core";
 
 export const InvoicePaid = defineEvent({
   name: "invoice.paid",
   version: 1,
-  level: Level.Outbox, // durable
+  delivery: "durable", // inline | background | durable | broker
   schema: z.object({ amountCents: z.number().int().nonnegative() }),
 });
 ```
