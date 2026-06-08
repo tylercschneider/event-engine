@@ -1,11 +1,13 @@
 import type { Level } from "./event";
 import type { Capabilities } from "./capabilities";
+import type { ProcessType } from "./process-type";
 
 export interface DispatchedEvent {
   name: string;
   eventId?: string;
   type?: string;
-  level: Level;
+  processType?: ProcessType;
+  level?: Level;
   capabilities?: Capabilities;
   payload: unknown;
   occurredAt: string;
@@ -37,7 +39,7 @@ export class HandlerRegistry {
     for (const registration of this.registrations) {
       if (
         registration.levels === "all" ||
-        registration.levels.includes(event.level)
+        (event.level !== undefined && registration.levels.includes(event.level))
       ) {
         await registration.handler(event);
       }

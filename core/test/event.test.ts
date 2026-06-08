@@ -5,7 +5,7 @@ import { defineEvent, Level } from "../src/event";
 const InvoicePaid = defineEvent({
   name: "invoice.paid",
   version: 1,
-  delivery: "durable",
+  processType: "durable",
   schema: z.object({ amountCents: z.number() }),
 });
 
@@ -63,7 +63,7 @@ describe("defineEvent", () => {
     const Published = defineEvent({
       name: "thing.published",
       version: 1,
-      delivery: "broker",
+      processType: "broker",
       schema: z.object({ id: z.string() }),
     });
     const event = Published.build({ id: "x" }, "2026-01-01T00:00:00Z");
@@ -125,13 +125,13 @@ describe("defineEvent", () => {
     const withNumber = defineEvent({
       name: "thing.happened",
       version: 1,
-      delivery: "inline",
+      processType: "inline",
       schema: z.object({ value: z.number() }),
     });
     const withString = defineEvent({
       name: "thing.happened",
       version: 1,
-      delivery: "inline",
+      processType: "inline",
       schema: z.object({ value: z.string() }),
     });
     expect(withNumber.fingerprint).not.toBe(withString.fingerprint);
@@ -141,13 +141,13 @@ describe("defineEvent", () => {
     const v1 = defineEvent({
       name: "thing.happened",
       version: 1,
-      delivery: "inline",
+      processType: "inline",
       schema: z.object({ value: z.number() }),
     });
     const v2 = defineEvent({
       name: "thing.happened",
       version: 2,
-      delivery: "inline",
+      processType: "inline",
       schema: z.object({ value: z.number() }),
     });
     expect(v1.fingerprint).not.toBe(v2.fingerprint);

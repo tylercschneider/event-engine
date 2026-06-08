@@ -1,6 +1,6 @@
 export { defineEvent, Level } from "./event";
 export type { BuildOptions } from "./event";
-export type { DeliveryPreset } from "./delivery-preset";
+export type { ProcessType } from "./process-type";
 export { capabilitiesFor } from "./capabilities";
 export type { Capabilities } from "./capabilities";
 export { EventRegistry, SchemaDriftError } from "./registry";

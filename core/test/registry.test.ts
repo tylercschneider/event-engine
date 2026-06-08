@@ -6,7 +6,7 @@ import { EventRegistry, SchemaDriftError } from "../src/registry";
 const InvoicePaid = defineEvent({
   name: "invoice.paid",
   version: 1,
-  delivery: "durable",
+  processType: "durable",
   schema: z.object({ amountCents: z.number() }),
 });
 
@@ -29,13 +29,13 @@ describe("EventRegistry", () => {
     const original = defineEvent({
       name: "report.run",
       version: 1,
-      delivery: "inline",
+      processType: "inline",
       schema: z.object({ rows: z.number() }),
     });
     const drifted = defineEvent({
       name: "report.run",
       version: 1,
-      delivery: "inline",
+      processType: "inline",
       schema: z.object({ rows: z.string() }),
     });
     registry.register(original);

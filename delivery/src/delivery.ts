@@ -1,18 +1,10 @@
 import {
-  Level,
   type Handler,
   type Subscriber,
   type DispatchedEvent,
 } from "@event-engine/core";
 import type { JobQueue } from "@event-engine/ports";
 import type { OutboxEvent } from "./outbox";
-
-export class UnsupportedLevelError extends Error {
-  constructor(level: Level) {
-    super(`delivery does not support level ${String(level)}`);
-    this.name = "UnsupportedLevelError";
-  }
-}
 
 export interface DeliveryDeps {
   subscribersFor: (eventName: string) => Subscriber[];
@@ -35,18 +27,15 @@ export class Delivery {
 
   handler(): Handler {
     return async (event) => {
-      if (event.level === Level.EventSourcing) {
-        throw new UnsupportedLevelError(event.level);
-      }
-      const capabilities = event.capabilities;
-      if (capabilities?.durable) {
+      const processType = event.processType;
+      if (processType === "durable" || processType === "broker") {
         await this.deps.outbox.emit(event);
-      } else if (capabilities?.backgrounded) {
+      } else if (processType === "background") {
         await this.deps.jobs?.enqueue<DispatchedEvent>({
           name: "dispatch-subscribers",
           payload: event,
         });
-      } else {
+      } else if (processType === "inline") {
         await this.dispatchSubscribers(event);
       }
     };

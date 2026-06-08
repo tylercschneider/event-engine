@@ -30,7 +30,7 @@ describe("@event-engine/delivery public api", () => {
     const InvoicePaid = defineEvent({
       name: "invoice.paid",
       version: 1,
-      delivery: "durable",
+      processType: "durable",
       schema: z.object({ amountCents: z.number() }),
     });
     const log = new InMemoryAppendOnlyStore<OutboxEvent>();
@@ -48,7 +48,7 @@ describe("@event-engine/delivery public api", () => {
     const InvoicePaid = defineEvent({
       name: "invoice.paid",
       version: 1,
-      delivery: "durable",
+      processType: "durable",
       schema: z.object({ amountCents: z.number() }),
     });
     const log = new InMemoryAppendOnlyStore<OutboxEvent>();
@@ -113,7 +113,7 @@ describe("@event-engine/delivery public api", () => {
     const Signup = defineEvent({
       name: "user.signup",
       version: 1,
-      delivery: "inline",
+      processType: "inline",
       schema: z.object({ userId: z.string() }),
     });
     await engine.emit(Signup, { userId: "u1" }, "2026-01-01T00:00:00Z");

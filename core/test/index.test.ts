@@ -26,7 +26,7 @@ describe("@event-engine/core public api", () => {
     const Signup = defineEvent({
       name: "user.signup",
       version: 1,
-      delivery: "inline",
+      processType: "inline",
       schema: z.object({ userId: z.string() }),
     });
     const event = Signup.build({ userId: "u1" }, "2026-01-01T00:00:00Z");
@@ -37,7 +37,7 @@ describe("@event-engine/core public api", () => {
     const Signup = defineEvent({
       name: "user.signup",
       version: 2,
-      delivery: "inline",
+      processType: "inline",
       schema: z.object({ userId: z.string() }),
     });
     const event = Signup.build({ userId: "u1" }, "2026-01-01T00:00:00Z", {
@@ -58,7 +58,7 @@ describe("@event-engine/core public api", () => {
     const Signup = defineEvent({
       name: "user.signup",
       version: 1,
-      delivery: "inline",
+      processType: "inline",
       schema: z.object({ userId: z.string() }),
     });
     registry.register(Signup);
@@ -72,13 +72,13 @@ describe("@event-engine/core public api", () => {
     const original = defineEvent({
       name: "order.placed",
       version: 1,
-      delivery: "durable",
+      processType: "durable",
       schema: z.object({ total: z.number() }),
     });
     const drifted = defineEvent({
       name: "order.placed",
       version: 1,
-      delivery: "durable",
+      processType: "durable",
       schema: z.object({ total: z.string() }),
     });
     registry.register(original);
@@ -118,7 +118,7 @@ describe("@event-engine/core public api", () => {
     const Signup = defineEvent({
       name: "user.signup",
       version: 1,
-      delivery: "inline",
+      processType: "inline",
       schema: z.object({ userId: z.string() }),
     });
     await engine.emit(Signup, { userId: "u1" }, "2026-01-01T00:00:00Z");
@@ -134,7 +134,7 @@ describe("@event-engine/core public api", () => {
     const Signup = defineEvent({
       name: "user.signup",
       version: 2,
-      delivery: "inline",
+      processType: "inline",
       schema: z.object({ userId: z.string() }),
     });
     await engine.emit(Signup, { userId: "u1" }, "2026-01-01T00:00:00Z", {
@@ -165,7 +165,7 @@ describe("@event-engine/core public api", () => {
     const Signup = defineEvent({
       name: "user.signup",
       version: 1,
-      delivery: "inline",
+      processType: "inline",
       schema: z.object({ userId: z.string() }),
     });
     await engine.emit(Signup, { userId: "u1" }, "2026-01-01T00:00:00Z");
@@ -176,7 +176,7 @@ describe("@event-engine/core public api", () => {
     const Signup = defineEvent({
       name: "user.signup",
       version: 1,
-      delivery: "background",
+      processType: "background",
       schema: z.object({ userId: z.string() }),
     });
     const event = Signup.build({ userId: "u1" }, "2026-01-01T00:00:00Z");
@@ -196,7 +196,7 @@ describe("@event-engine/core public api", () => {
     const Signup = defineEvent({
       name: "user.signup",
       version: 1,
-      delivery: "inline",
+      processType: "inline",
       schema: z.object({ userId: z.string() }),
     });
     await engine.emit(Signup, { userId: "u1" }, "2026-01-01T00:00:00Z");
@@ -215,7 +215,7 @@ describe("@event-engine/core public api", () => {
     const Signup = defineEvent({
       name: "user.signup",
       version: 1,
-      delivery: "inline",
+      processType: "inline",
       schema: z.object({ userId: z.string() }),
     });
     await engine.emit(Signup, { userId: "u1" }, "2026-01-01T00:00:00Z");
@@ -235,7 +235,7 @@ describe("@event-engine/core public api", () => {
     const Signup = defineEvent({
       name: "user.signup",
       version: 3,
-      delivery: "inline",
+      processType: "inline",
       schema: z.object({ userId: z.string() }),
     });
     await engine.emit(Signup, { userId: "u1" }, "2026-01-01T00:00:00Z", {
@@ -265,13 +265,13 @@ describe("@event-engine/core public api", () => {
     const v1 = defineEvent({
       name: "order.shipped",
       version: 1,
-      delivery: "durable",
+      processType: "durable",
       schema: z.object({ id: z.string() }),
     });
     const v2 = defineEvent({
       name: "order.shipped",
       version: 2,
-      delivery: "durable",
+      processType: "durable",
       schema: z.object({ id: z.string() }),
     });
     const committed = mergeSchema(
@@ -290,7 +290,7 @@ describe("@event-engine/core public api", () => {
     const original = defineEvent({
       name: "order.placed",
       version: 1,
-      delivery: "durable",
+      processType: "durable",
       schema: z.object({ total: z.number() }),
     });
     const committed = dumpSchema(
@@ -299,7 +299,7 @@ describe("@event-engine/core public api", () => {
     const changed = defineEvent({
       name: "order.placed",
       version: 1,
-      delivery: "durable",
+      processType: "durable",
       schema: z.object({ total: z.string() }),
     });
     let caught: unknown;
@@ -323,7 +323,7 @@ describe("@event-engine/core public api", () => {
     const OrderPlaced = defineEvent({
       name: "order.placed",
       version: 1,
-      delivery: "durable",
+      processType: "durable",
       schema: z.object({ total: z.number() }),
     });
     const cli = createSchemaCli([OrderPlaced], effects);
@@ -339,7 +339,7 @@ describe("@event-engine/core public api", () => {
     const OrderPlaced = defineEvent({
       name: "order.placed",
       version: 1,
-      delivery: "durable",
+      processType: "durable",
       schema: z.object({ total: z.number() }),
     });
     const cli = createSchemaCli([OrderPlaced], createNodeEffects());

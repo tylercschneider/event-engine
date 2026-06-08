@@ -6,7 +6,7 @@ import { defineEvent } from "../src/event";
 const InvoicePaid = defineEvent({
   name: "invoice.paid",
   version: 1,
-  delivery: "durable",
+  processType: "durable",
   schema: z.object({ amountCents: z.number() }),
 });
 
