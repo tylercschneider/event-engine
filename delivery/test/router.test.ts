@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { Level } from "@event-engine/core";
+import { Level } from "@eventengine/core";
 import { levelRouter, UnroutableLevelError } from "../src/router";
 import type { OutboxEvent, Transport } from "../src/outbox";
 

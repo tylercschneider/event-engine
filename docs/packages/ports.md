@@ -1,4 +1,4 @@
-# @event-engine/ports
+# @eventengine/ports
 
 The substrate the Ruby version gets from Rails. TypeScript has no default ORM, ambient transaction, or job queue, so these are small interfaces with in-memory reference adapters. Every DB/job-bound package binds through them, and a production adapter (Postgres, BullMQ) slots in behind the same shape.
 

@@ -1,5 +1,5 @@
 {
-  "name": "@event-engine/core",
+  "name": "@eventengine/core",
   "version": "0.0.0",
   "private": true,
   "type": "module",

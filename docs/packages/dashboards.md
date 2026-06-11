@@ -1,4 +1,4 @@
-# @event-engine/dashboards
+# @eventengine/dashboards
 
 Headless **dashboards-as-data**. It owns the dashboard config and resolves it into plain JSON; it renders nothing. Every frontend (React/Vue/Svelte/vanilla) consumes the same resolved data with its own components and styling.
 
@@ -26,7 +26,7 @@ const resolved = await resolveDashboard(dashboard, provider);
 // { title, placements: [{ statKey, chart, layout, result: StatResult }] }  — skips hidden placements
 ```
 
-The `DataProvider` is where `@event-engine/stats` plugs in.
+The `DataProvider` is where `@eventengine/stats` plugs in.
 
 ## Customization (immutable)
 

@@ -1,5 +1,5 @@
 {
-  "name": "@event-engine/telemetry",
+  "name": "@eventengine/telemetry",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@event-engine/core": "workspace:*",
+    "@eventengine/core": "workspace:*",
     "zod": "^3.24.1"
   }
 }

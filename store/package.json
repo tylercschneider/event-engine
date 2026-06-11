@@ -1,5 +1,5 @@
 {
-  "name": "@event-engine/store",
+  "name": "@eventengine/store",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -11,8 +11,8 @@
     "build:locals": "the-local build ."
   },
   "dependencies": {
-    "@event-engine/ports": "workspace:*",
-    "@event-engine/core": "workspace:*"
+    "@eventengine/ports": "workspace:*",
+    "@eventengine/core": "workspace:*"
   },
   "devDependencies": {
     "zod": "^3.24.1"

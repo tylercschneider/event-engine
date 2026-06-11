@@ -1,4 +1,4 @@
-import type { StoredEvent } from "@event-engine/store";
+import type { StoredEvent } from "@eventengine/store";
 import type { Measure } from "./measure";
 
 export interface RollupEntry {

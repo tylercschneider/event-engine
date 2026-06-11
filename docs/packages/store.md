@@ -1,4 +1,4 @@
-# @event-engine/store
+# @eventengine/store
 
 The permanent, queryable event record — and the projections + replay built on it. It plugs into the engine as **two handlers**, mirroring the Ruby gem's `Recorder` + `ProjectionDispatcher`.
 

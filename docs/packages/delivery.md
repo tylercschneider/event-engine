@@ -1,4 +1,4 @@
-# @event-engine/delivery
+# @eventengine/delivery
 
 Reliable event delivery: a level-routing handler, a stateful outbox, a publisher that drains it, an observability dashboard, and retry + dead-letter.
 

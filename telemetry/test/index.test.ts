@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { z } from "zod";
-import { defineEvent } from "@event-engine/core";
+import { defineEvent } from "@eventengine/core";
 import {
   Collector,
   collectorHandler,
@@ -9,7 +9,7 @@ import {
   type Sink,
 } from "../src/index";
 
-describe("@event-engine/telemetry public api", () => {
+describe("@eventengine/telemetry public api", () => {
   it("collects a defined telemetry event and flushes it to the sink through the package entry", async () => {
     const PageView = defineEvent({
       name: "page.view",

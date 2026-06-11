@@ -6,7 +6,7 @@ import {
   type Stat,
 } from "../src/index";
 
-describe("@event-engine/stats public api", () => {
+describe("@eventengine/stats public api", () => {
   it("narrows a result by its shape through the package entry", () => {
     const result = scalar(7, { asOf: "2026-01-01T00:00:00Z", exact: true });
     const rendered = result.shape === "scalar" ? result.value : 0;

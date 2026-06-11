@@ -6,7 +6,7 @@ This walks through the core flow end to end: define an event, wire an `EventEngi
 
 ```ts
 import { z } from "zod";
-import { defineEvent } from "@event-engine/core";
+import { defineEvent } from "@eventengine/core";
 
 export const InvoicePaid = defineEvent({
   name: "invoice.paid",
@@ -21,9 +21,9 @@ You get runtime validation **and** a static payload type from this one declarati
 ## 2. Wire the engine + handlers
 
 ```ts
-import { EventEngine } from "@event-engine/core";
-import { InMemoryAppendOnlyStore } from "@event-engine/ports";
-import { EventStore, type StoredEvent } from "@event-engine/store";
+import { EventEngine } from "@eventengine/core";
+import { InMemoryAppendOnlyStore } from "@eventengine/ports";
+import { EventStore, type StoredEvent } from "@eventengine/store";
 
 const engine = new EventEngine();
 
@@ -53,8 +53,8 @@ import {
   OutboxStore,
   OutboxPublisher,
   OutboxDashboard,
-} from "@event-engine/delivery";
-import { InlineJobQueue, InMemoryTransactionManager } from "@event-engine/ports";
+} from "@eventengine/delivery";
+import { InlineJobQueue, InMemoryTransactionManager } from "@eventengine/ports";
 
 const outboxStore = new OutboxStore();
 const transport = (event) => publishToBroker(event); // your transport

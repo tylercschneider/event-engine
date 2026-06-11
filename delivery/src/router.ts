@@ -1,4 +1,4 @@
-import type { Level } from "@event-engine/core";
+import type { Level } from "@eventengine/core";
 import type { OutboxEvent, Transport } from "./outbox";
 
 export class UnroutableLevelError extends Error {

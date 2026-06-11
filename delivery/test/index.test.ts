@@ -5,12 +5,12 @@ import {
   Level,
   EventEngine,
   Notifications,
-} from "@event-engine/core";
+} from "@eventengine/core";
 import {
   InMemoryAppendOnlyStore,
   InlineJobQueue,
   InMemoryTransactionManager,
-} from "@event-engine/ports";
+} from "@eventengine/ports";
 import {
   Outbox,
   Delivery,
@@ -25,7 +25,7 @@ import {
   type DeliveryChannels,
 } from "../src/index";
 
-describe("@event-engine/delivery public api", () => {
+describe("@eventengine/delivery public api", () => {
   it("emits a defined event and delivers it through a transport via the package entry", async () => {
     const InvoicePaid = defineEvent({
       name: "invoice.paid",

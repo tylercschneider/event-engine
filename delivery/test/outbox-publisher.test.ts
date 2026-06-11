@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { Notifications } from "@event-engine/core";
+import { Notifications } from "@eventengine/core";
 import {
   OutboxPublisher,
   type DeliveryChannels,

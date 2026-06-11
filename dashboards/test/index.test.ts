@@ -4,7 +4,7 @@ import {
   resolveInputs,
   scalar,
   type Stat,
-} from "@event-engine/stats";
+} from "@eventengine/stats";
 import {
   resolveDashboard,
   setFilter,
@@ -14,7 +14,7 @@ import {
   type SharedDashboard,
 } from "../src/index";
 
-describe("@event-engine/dashboards public api", () => {
+describe("@eventengine/dashboards public api", () => {
   it("resolves a dashboard whose provider is backed by a stat source", async () => {
     const Revenue: Stat = {
       key: "revenue",

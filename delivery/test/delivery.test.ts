@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { type ProcessType, type Subscriber } from "@event-engine/core";
-import { InlineJobQueue } from "@event-engine/ports";
+import { type ProcessType, type Subscriber } from "@eventengine/core";
+import { InlineJobQueue } from "@eventengine/ports";
 import { Delivery } from "../src/delivery";
 import type { OutboxEvent } from "../src/outbox";
 

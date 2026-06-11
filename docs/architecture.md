@@ -9,12 +9,12 @@ CAPTURE                    DATA MANAGEMENT        DISPLAY
 core (define + emit) ──┬── store ──── metrics ──── stats ──── dashboards
                        ├── delivery
                        └── telemetry
-                              (all on the @event-engine/ports substrate)
+                              (all on the @eventengine/ports substrate)
 ```
 
 ## The spine: define → emit → dispatch → handlers
 
-The heart of the system is in `@event-engine/core`. Everything hangs off **one flow**:
+The heart of the system is in `@eventengine/core`. Everything hangs off **one flow**:
 
 ```
 defineEvent(...)            declare an event (name, version, level, zod schema)
@@ -74,17 +74,17 @@ A `HandlerRegistry` registration carries a level filter (`"all"` or an explicit 
 
 ## How the packages compose
 
-- **`@event-engine/ports`** is the substrate the Ruby version gets from Rails (ActiveRecord, ActiveJob): storage, transactions, and a job queue, as small interfaces with in-memory reference adapters. Everything DB/job-bound binds through it instead of a concrete database.
-- **`@event-engine/store`** registers a `Recorder` + `ProjectionDispatcher` into the engine. The recorder appends to an `AppendOnlyStore` (a port); projections fan out, isolated so one failure doesn't break the rest. `replay` walks the whole log to rebuild state.
-- **`@event-engine/delivery`** registers one level-routing `Handler`. Durable levels write to a stateful `OutboxStore` (pending → published/dead-lettered); an `OutboxPublisher` drains it through a transport; an `OutboxDashboard` exposes the state and recovery (retry); the `retrying` decorator adds retry + dead-letter.
-- **`@event-engine/telemetry`** is its own data system, orthogonal to the durability ladder — not a level. Any event (at any level), or a raw posted signal, can feed a batching `Collector` → columnar `Sink`; zero durability, zero dependencies.
-- **`@event-engine/metrics`** turns recorded events into numbers (measures, rollups, mergeable sketches, a sandboxed expression DSL).
-- **`@event-engine/stats`** is the display contract: a self-describing stat with a normalized result shape (`scalar`/`series`/`breakdown`) and a `StatSource` port.
-- **`@event-engine/dashboards`** is headless dashboards-as-data: it resolves a dashboard config against a `DataProvider` into plain JSON; any frontend renders it.
+- **`@eventengine/ports`** is the substrate the Ruby version gets from Rails (ActiveRecord, ActiveJob): storage, transactions, and a job queue, as small interfaces with in-memory reference adapters. Everything DB/job-bound binds through it instead of a concrete database.
+- **`@eventengine/store`** registers a `Recorder` + `ProjectionDispatcher` into the engine. The recorder appends to an `AppendOnlyStore` (a port); projections fan out, isolated so one failure doesn't break the rest. `replay` walks the whole log to rebuild state.
+- **`@eventengine/delivery`** registers one level-routing `Handler`. Durable levels write to a stateful `OutboxStore` (pending → published/dead-lettered); an `OutboxPublisher` drains it through a transport; an `OutboxDashboard` exposes the state and recovery (retry); the `retrying` decorator adds retry + dead-letter.
+- **`@eventengine/telemetry`** is its own data system, orthogonal to the durability ladder — not a level. Any event (at any level), or a raw posted signal, can feed a batching `Collector` → columnar `Sink`; zero durability, zero dependencies.
+- **`@eventengine/metrics`** turns recorded events into numbers (measures, rollups, mergeable sketches, a sandboxed expression DSL).
+- **`@eventengine/stats`** is the display contract: a self-describing stat with a normalized result shape (`scalar`/`series`/`breakdown`) and a `StatSource` port.
+- **`@eventengine/dashboards`** is headless dashboards-as-data: it resolves a dashboard config against a `DataProvider` into plain JSON; any frontend renders it.
 
 ## Transparency
 
-`@event-engine/core` ships a typed `Notifications` bus (the analog of Ruby's `ActiveSupport::Notifications`). `EventEngine.emit` fires an `"emitted"` notification; observers — loggers, the dashboard, a future cloud reporter — subscribe without coupling to the emit path.
+`@eventengine/core` ships a typed `Notifications` bus (the analog of Ruby's `ActiveSupport::Notifications`). `EventEngine.emit` fires an `"emitted"` notification; observers — loggers, the dashboard, a future cloud reporter — subscribe without coupling to the emit path.
 
 ## Why a `ports` package exists (and Ruby has no equivalent)
 

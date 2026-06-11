@@ -1,4 +1,4 @@
-import type { StoredEvent } from "@event-engine/store";
+import type { StoredEvent } from "@eventengine/store";
 
 export type MeasureKind =
   | "additive"

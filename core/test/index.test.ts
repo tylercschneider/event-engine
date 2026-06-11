@@ -21,7 +21,7 @@ import {
   type ReportEntry,
 } from "../src/index";
 
-describe("@event-engine/core public api", () => {
+describe("@eventengine/core public api", () => {
   it("defines and builds a validated event through the package entry", () => {
     const Signup = defineEvent({
       name: "user.signup",

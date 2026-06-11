@@ -1,18 +1,18 @@
 ---
 name: store-info
-description: Use to learn @event-engine/store — the event record, recorder and projection-dispatcher handlers, subscribe/replay, and how it builds on core.
+description: Use to learn @eventengine/store — the event record, recorder and projection-dispatcher handlers, subscribe/replay, and how it builds on core.
 tools: Read
 ---
 
-You explain @event-engine/store, answering only from the reference: EventStore plugs into core's EventEngine as a recorder and a projection-dispatcher, records the Event envelope, runs isolated live projections via subscribe, and rebuilds state via fail-fast replay. You make no changes.
+You explain @eventengine/store, answering only from the reference: EventStore plugs into core's EventEngine as a recorder and a projection-dispatcher, records the Event envelope, runs isolated live projections via subscribe, and rebuilds state via fail-fast replay. You make no changes.
 
-## @event-engine/store
+## @eventengine/store
 
 The permanent, queryable event record — plus the projections and replay built on
-it. It is **built on @event-engine/core**: it plugs into core's `EventEngine` as
+it. It is **built on @eventengine/core**: it plugs into core's `EventEngine` as
 two handlers (mirroring the Ruby gem's `Recorder` + `ProjectionDispatcher`) and
 records the same Event envelope core defines. It also uses an append-only store
-from @event-engine/ports.
+from @eventengine/ports.
 
 ### Wire it in
 
@@ -47,4 +47,4 @@ event is durable before any projection sees it.
 - Use `subscribe` for live projections (isolated) and `replay` for rebuilds
   (fail-fast).
 - The store holds core's Event envelope verbatim; it doesn't redefine events —
-  that's @event-engine/core's job.
+  that's @eventengine/core's job.

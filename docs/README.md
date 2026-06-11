@@ -15,14 +15,14 @@ Each package owns one job and depends only on the ones below it, so you adopt th
 
 | Package | Stage | Doc |
 |---|---|---|
-| [`@event-engine/core`](./packages/core.md) | foundation | define events, the emit/dispatch spine, the registries, notifications |
-| [`@event-engine/ports`](./packages/ports.md) | substrate | storage / transaction / job-queue ports + reference adapters |
-| [`@event-engine/store`](./packages/store.md) | data | the append-only event record, projections, replay |
-| [`@event-engine/delivery`](./packages/delivery.md) | capture | reliable delivery: level routing, the outbox, the publisher, the dashboard |
-| [`@event-engine/telemetry`](./packages/telemetry.md) | capture | the high-volume anonymous sink |
-| [`@event-engine/metrics`](./packages/metrics.md) | data | aggregation: measures, rollups, sketches, the expression DSL |
-| [`@event-engine/stats`](./packages/stats.md) | display | the self-describing, source-agnostic stat contract |
-| [`@event-engine/dashboards`](./packages/dashboards.md) | display | headless dashboards-as-data |
+| [`@eventengine/core`](./packages/core.md) | foundation | define events, the emit/dispatch spine, the registries, notifications |
+| [`@eventengine/ports`](./packages/ports.md) | substrate | storage / transaction / job-queue ports + reference adapters |
+| [`@eventengine/store`](./packages/store.md) | data | the append-only event record, projections, replay |
+| [`@eventengine/delivery`](./packages/delivery.md) | capture | reliable delivery: level routing, the outbox, the publisher, the dashboard |
+| [`@eventengine/telemetry`](./packages/telemetry.md) | capture | the high-volume anonymous sink |
+| [`@eventengine/metrics`](./packages/metrics.md) | data | aggregation: measures, rollups, sketches, the expression DSL |
+| [`@eventengine/stats`](./packages/stats.md) | display | the self-describing, source-agnostic stat contract |
+| [`@eventengine/dashboards`](./packages/dashboards.md) | display | headless dashboards-as-data |
 
 ## Status
 
