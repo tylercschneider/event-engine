@@ -2,8 +2,8 @@ import type {
   AppendOnlyStore,
   JobQueue,
   TransactionManager,
-} from "@event-engine/ports";
-import type { Level } from "@event-engine/core";
+} from "@eventengine/ports";
+import type { Level } from "@eventengine/core";
 
 export interface OutboxEvent {
   name: string;

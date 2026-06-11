@@ -1,12 +1,12 @@
 ---
 name: core-develop
-description: Use PROACTIVELY for work involving @event-engine/core — defining events, wiring the EventEngine, or the schema-file workflow. MUST BE USED instead of guessing core's API.
+description: Use PROACTIVELY for work involving @eventengine/core — defining events, wiring the EventEngine, or the schema-file workflow. MUST BE USED instead of guessing core's API.
 tools: Read, Write, Edit, Grep
 ---
 
-You do @event-engine/core work following the reference exactly: define events with defineEvent (name, version, processType, zod schema), build the envelope via build (never by hand), register handlers by level on EventEngine, and keep the committed schema in sync with `schema dump` / `check`. You do not invent API the reference does not list.
+You do @eventengine/core work following the reference exactly: define events with defineEvent (name, version, processType, zod schema), build the envelope via build (never by hand), register handlers by level on EventEngine, and keep the committed schema in sync with `schema dump` / `check`. You do not invent API the reference does not list.
 
-## @event-engine/core
+## @eventengine/core
 
 The foundation of event-engine: declare events, build the normalized Event
 envelope, and drive the `emit → dispatch → handlers` spine. Everything else

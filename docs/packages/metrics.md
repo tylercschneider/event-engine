@@ -1,6 +1,6 @@
-# @event-engine/metrics
+# @eventengine/metrics
 
-Turn recorded events into numbers — the aggregation engine. Operates over `StoredEvent[]` from `@event-engine/store`.
+Turn recorded events into numbers — the aggregation engine. Operates over `StoredEvent[]` from `@eventengine/store`.
 
 ## Measures
 

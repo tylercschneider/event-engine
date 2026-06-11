@@ -3,7 +3,7 @@ import {
   InMemoryAppendOnlyStore,
   InlineJobQueue,
   InMemoryTransactionManager,
-} from "@event-engine/ports";
+} from "@eventengine/ports";
 import { Outbox, type OutboxEvent } from "../src/outbox";
 
 describe("Outbox", () => {

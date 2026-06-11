@@ -1,4 +1,4 @@
-# @event-engine/core
+# @eventengine/core
 
 The foundation: declare events, build the normalized Event envelope, and drive the `emit → dispatch → handlers` spine. Everything else registers into it.
 
@@ -58,7 +58,7 @@ Each definition also carries a version-independent **`shape`** (sha256 of `name:
 
 ```ts
 #!/usr/bin/env node
-import { createSchemaCli, createNodeEffects } from "@event-engine/core";
+import { createSchemaCli, createNodeEffects } from "@eventengine/core";
 import { OrderPlaced, OrderShipped } from "../src/events";
 
 const code = createSchemaCli([OrderPlaced, OrderShipped], createNodeEffects()).run(

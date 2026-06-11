@@ -1,5 +1,5 @@
 {
-  "name": "@event-engine/dashboards",
+  "name": "@eventengine/dashboards",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -10,6 +10,6 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@event-engine/stats": "workspace:*"
+    "@eventengine/stats": "workspace:*"
   }
 }

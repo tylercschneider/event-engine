@@ -2,8 +2,8 @@ import {
   type Handler,
   type Subscriber,
   type DispatchedEvent,
-} from "@event-engine/core";
-import type { JobQueue } from "@event-engine/ports";
+} from "@eventengine/core";
+import type { JobQueue } from "@eventengine/ports";
 import type { OutboxEvent } from "./outbox";
 
 export interface DeliveryDeps {

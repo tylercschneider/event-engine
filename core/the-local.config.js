@@ -1,8 +1,8 @@
-// the-local provider config for @event-engine/core. Edit this, then run
+// the-local provider config for @eventengine/core. Edit this, then run
 // `the-local build core` to re-render the committed agents under the-local/agents/.
 // The committed .md are the contract a host installs; this is their source.
 
-const reference = `## @event-engine/core
+const reference = `## @eventengine/core
 
 The foundation of event-engine: declare events, build the normalized Event
 envelope, and drive the \`emit → dispatch → handlers\` spine. Everything else
@@ -72,11 +72,11 @@ export default {
     {
       name: "info",
       description:
-        "Use to learn @event-engine/core — defining events, the Event envelope, " +
+        "Use to learn @eventengine/core — defining events, the Event envelope, " +
         "the EventEngine bus, the registries, and the schema-file workflow.",
       tools: "Read",
       body:
-        "You explain @event-engine/core, answering only from the reference: " +
+        "You explain @eventengine/core, answering only from the reference: " +
         "defineEvent declares events with a zod schema and processType, build " +
         "validates and freezes the Event envelope, EventEngine drives emit → " +
         "dispatch → level-matched handlers, and the schema-file workflow " +
@@ -86,12 +86,12 @@ export default {
     {
       name: "develop",
       description:
-        "Use PROACTIVELY for work involving @event-engine/core — defining events, " +
+        "Use PROACTIVELY for work involving @eventengine/core — defining events, " +
         "wiring the EventEngine, or the schema-file workflow. MUST BE USED instead " +
         "of guessing core's API.",
       tools: "Read, Write, Edit, Grep",
       body:
-        "You do @event-engine/core work following the reference exactly: define " +
+        "You do @eventengine/core work following the reference exactly: define " +
         "events with defineEvent (name, version, processType, zod schema), build " +
         "the envelope via build (never by hand), register handlers by level on " +
         "EventEngine, and keep the committed schema in sync with `schema dump` / " +

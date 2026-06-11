@@ -1,4 +1,4 @@
-import type { Notifications } from "@event-engine/core";
+import type { Notifications } from "@eventengine/core";
 import type { OutboxStore, OutboxRecord } from "./outbox-store";
 import type { Transport } from "./outbox";
 

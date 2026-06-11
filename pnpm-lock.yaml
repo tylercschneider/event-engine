@@ -42,16 +42,16 @@ importers:
 
   dashboards:
     dependencies:
-      '@event-engine/stats':
+      '@eventengine/stats':
         specifier: workspace:*
         version: link:../stats
 
   delivery:
     dependencies:
-      '@event-engine/core':
+      '@eventengine/core':
         specifier: workspace:*
         version: link:../core
-      '@event-engine/ports':
+      '@eventengine/ports':
         specifier: workspace:*
         version: link:../ports
     devDependencies:
@@ -61,11 +61,11 @@ importers:
 
   metrics:
     dependencies:
-      '@event-engine/store':
+      '@eventengine/store':
         specifier: workspace:*
         version: link:../store
     devDependencies:
-      '@event-engine/ports':
+      '@eventengine/ports':
         specifier: workspace:*
         version: link:../ports
 
@@ -75,10 +75,10 @@ importers:
 
   store:
     dependencies:
-      '@event-engine/core':
+      '@eventengine/core':
         specifier: workspace:*
         version: link:../core
-      '@event-engine/ports':
+      '@eventengine/ports':
         specifier: workspace:*
         version: link:../ports
     devDependencies:
@@ -88,7 +88,7 @@ importers:
 
   telemetry:
     devDependencies:
-      '@event-engine/core':
+      '@eventengine/core':
         specifier: workspace:*
         version: link:../core
       zod:

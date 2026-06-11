@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { InMemoryAppendOnlyStore } from "@event-engine/ports";
-import { Level } from "@event-engine/core";
+import { InMemoryAppendOnlyStore } from "@eventengine/ports";
+import { Level } from "@eventengine/core";
 import { EventStore, type StoredEvent } from "../src/event-store";
 
 function dispatched(name: string): StoredEvent & { level: Level } {

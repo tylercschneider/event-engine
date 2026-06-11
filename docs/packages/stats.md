@@ -1,4 +1,4 @@
-# @event-engine/stats
+# @eventengine/stats
 
 The display contract: a self-describing, source-agnostic **stat**, and the normalized result shape every stat resolves to. Depends on nothing concrete — a source adapter bridges it to data.
 
@@ -47,7 +47,7 @@ interface StatSource {
 }
 ```
 
-`InMemoryStatSource` is the reference; `@event-engine/metrics` (or a dashboard's `DataProvider`) implements it for real.
+`InMemoryStatSource` is the reference; `@eventengine/metrics` (or a dashboard's `DataProvider`) implements it for real.
 
 ## Status
 

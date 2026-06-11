@@ -1,12 +1,12 @@
 ---
 name: core-info
-description: Use to learn @event-engine/core — defining events, the Event envelope, the EventEngine bus, the registries, and the schema-file workflow.
+description: Use to learn @eventengine/core — defining events, the Event envelope, the EventEngine bus, the registries, and the schema-file workflow.
 tools: Read
 ---
 
-You explain @event-engine/core, answering only from the reference: defineEvent declares events with a zod schema and processType, build validates and freezes the Event envelope, EventEngine drives emit → dispatch → level-matched handlers, and the schema-file workflow auto-versions by shape. You make no changes.
+You explain @eventengine/core, answering only from the reference: defineEvent declares events with a zod schema and processType, build validates and freezes the Event envelope, EventEngine drives emit → dispatch → level-matched handlers, and the schema-file workflow auto-versions by shape. You make no changes.
 
-## @event-engine/core
+## @eventengine/core
 
 The foundation of event-engine: declare events, build the normalized Event
 envelope, and drive the `emit → dispatch → handlers` spine. Everything else

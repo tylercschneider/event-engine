@@ -1,10 +1,10 @@
 import { describe, it, expect } from "vitest";
 import { z } from "zod";
-import { defineEvent, EventEngine } from "@event-engine/core";
-import { InMemoryAppendOnlyStore } from "@event-engine/ports";
+import { defineEvent, EventEngine } from "@eventengine/core";
+import { InMemoryAppendOnlyStore } from "@eventengine/ports";
 import { EventStore, type StoredEvent } from "../src/index";
 
-describe("@event-engine/store public api", () => {
+describe("@eventengine/store public api", () => {
   it("captures a defined event and reads it back through the package entry", async () => {
     const InvoicePaid = defineEvent({
       name: "invoice.paid",

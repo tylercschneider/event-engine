@@ -1,4 +1,4 @@
-import type { StatResult } from "@event-engine/stats";
+import type { StatResult } from "@eventengine/stats";
 
 export interface Layout {
   x: number;

@@ -6,7 +6,7 @@ import {
   InlineJobQueue,
 } from "../src/index";
 
-describe("@event-engine/ports public api", () => {
+describe("@eventengine/ports public api", () => {
   it("exposes a working keyed store through the package entry", async () => {
     const store = new InMemoryKeyedStore<string, number>();
     await store.put("answer", 42);
