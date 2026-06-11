@@ -13,7 +13,11 @@
     "typecheck": "pnpm -r --if-present typecheck",
     "test": "vitest run",
     "test:watch": "vitest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "locals": "the-local install"
+  },
+  "dependencies": {
+    "the-local": "file:../the-local"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
