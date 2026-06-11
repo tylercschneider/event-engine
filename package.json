@@ -17,7 +17,7 @@
     "locals": "the-local install"
   },
   "dependencies": {
-    "the-local": "github:tylercschneider/the-local"
+    "the-local": "^0.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

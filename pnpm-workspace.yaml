@@ -9,4 +9,6 @@ packages:
   - "telemetry"
 allowBuilds:
   esbuild: true
-  the-local: true
+  the-local: false
+minimumReleaseAgeExclude:
+  - the-local@0.1.0
