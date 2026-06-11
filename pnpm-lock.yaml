@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       the-local:
-        specifier: github:tylercschneider/the-local
-        version: https://codeload.github.com/tylercschneider/the-local/tar.gz/23c69a1e11db32ade27c309318e67f49c4d0ba88
+        specifier: ^0.1.0
+        version: 0.1.0
     devDependencies:
       '@eslint/js':
         specifier: ^9.17.0
@@ -905,9 +905,8 @@ packages:
     resolution: {integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==}
     engines: {node: '>=8'}
 
-  the-local@https://codeload.github.com/tylercschneider/the-local/tar.gz/23c69a1e11db32ade27c309318e67f49c4d0ba88:
-    resolution: {gitHosted: true, integrity: sha512-V4BH5G7AANkYyFrDJCdQ3hezENDKA1ewMM31NYoL3LO4oInoCbZxT2X93v0QR9v2kIuYu8NzfhvmOC09wBCaNw==, tarball: https://codeload.github.com/tylercschneider/the-local/tar.gz/23c69a1e11db32ade27c309318e67f49c4d0ba88}
-    version: 0.0.0
+  the-local@0.1.0:
+    resolution: {integrity: sha512-R8zR7SXEsowBqTplrpMLGVaDi/jrJQCpiSu8LZO5ixXwUSXMx8KjKJ0MnXdcI27DWJarDkLcB8s9iGgtn2iHsg==}
     engines: {node: '>=20'}
     hasBin: true
 
@@ -1775,7 +1774,7 @@ snapshots:
     dependencies:
       has-flag: 4.0.0
 
-  the-local@https://codeload.github.com/tylercschneider/the-local/tar.gz/23c69a1e11db32ade27c309318e67f49c4d0ba88: {}
+  the-local@0.1.0: {}
 
   tinybench@2.9.0: {}
 
