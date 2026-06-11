@@ -7,10 +7,19 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build:locals": "the-local build ."
   },
   "dependencies": {
     "zod": "^3.24.1",
     "zod-to-json-schema": "^3.25.2"
-  }
+  },
+  "the-local": {
+    "prefix": "core",
+    "scope": "event definitions and the emit → dispatch → handlers spine",
+    "agentsDir": "the-local/agents"
+  },
+  "files": [
+    "the-local/agents"
+  ]
 }
