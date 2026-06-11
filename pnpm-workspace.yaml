@@ -9,3 +9,4 @@ packages:
   - "telemetry"
 allowBuilds:
   esbuild: true
+  the-local: true
