@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       the-local:
-        specifier: github:tylercschneider/the-local#feat/prepare-hook
-        version: https://codeload.github.com/tylercschneider/the-local/tar.gz/869788a2fee1fb95ed7f959d32090d0e14a4d22a
+        specifier: github:tylercschneider/the-local
+        version: https://codeload.github.com/tylercschneider/the-local/tar.gz/c6bc07ff2254143e9bd08f5fa5a9aa7419a88bc7
     devDependencies:
       '@eslint/js':
         specifier: ^9.17.0
@@ -905,8 +905,8 @@ packages:
     resolution: {integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==}
     engines: {node: '>=8'}
 
-  the-local@https://codeload.github.com/tylercschneider/the-local/tar.gz/869788a2fee1fb95ed7f959d32090d0e14a4d22a:
-    resolution: {gitHosted: true, tarball: https://codeload.github.com/tylercschneider/the-local/tar.gz/869788a2fee1fb95ed7f959d32090d0e14a4d22a}
+  the-local@https://codeload.github.com/tylercschneider/the-local/tar.gz/c6bc07ff2254143e9bd08f5fa5a9aa7419a88bc7:
+    resolution: {gitHosted: true, integrity: sha512-xZ59kU2dGOKZa3nCXLzrF0BdtUB85THhHJjpInKb0CgH8Q0g2NwoEJYAQqY1ijI+IjrpbfDKQpT0emuXniD8mw==, tarball: https://codeload.github.com/tylercschneider/the-local/tar.gz/c6bc07ff2254143e9bd08f5fa5a9aa7419a88bc7}
     version: 0.0.0
     engines: {node: '>=20'}
     hasBin: true
@@ -1775,7 +1775,7 @@ snapshots:
     dependencies:
       has-flag: 4.0.0
 
-  the-local@https://codeload.github.com/tylercschneider/the-local/tar.gz/869788a2fee1fb95ed7f959d32090d0e14a4d22a: {}
+  the-local@https://codeload.github.com/tylercschneider/the-local/tar.gz/c6bc07ff2254143e9bd08f5fa5a9aa7419a88bc7: {}
 
   tinybench@2.9.0: {}
 
