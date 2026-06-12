@@ -1,6 +1,6 @@
 {
   "name": "@eventengine/ports",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "description": "Storage, transaction, and job-queue ports for event-engine (in-memory adapters included).",
   "repository": {
@@ -12,7 +12,9 @@
   "exports": {
     ".": "./src/index.ts"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "publishConfig": {
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
