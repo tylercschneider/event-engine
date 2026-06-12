@@ -1,12 +1,31 @@
 {
   "name": "@eventengine/ports",
   "version": "0.0.0",
-  "private": true,
   "type": "module",
+  "description": "Storage, transaction, and job-queue ports for event-engine (in-memory adapters included).",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DYB-Development/event-engine.git",
+    "directory": "ports"
+  },
+  "homepage": "https://github.com/DYB-Development/event-engine/tree/main/ports#readme",
   "exports": {
     ".": "./src/index.ts"
   },
+  "files": ["dist"],
+  "publishConfig": {
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
+  },
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build": "tsup src/index.ts --format esm --dts --clean",
+    "prepublishOnly": "pnpm build"
   }
 }

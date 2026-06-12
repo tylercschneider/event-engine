@@ -1,13 +1,32 @@
 {
   "name": "@eventengine/store",
   "version": "0.0.0",
-  "private": true,
   "type": "module",
+  "description": "event-engine store: the permanent event record, projections, and replay built on @eventengine/core.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DYB-Development/event-engine.git",
+    "directory": "store"
+  },
+  "homepage": "https://github.com/DYB-Development/event-engine/tree/main/store#readme",
   "exports": {
     ".": "./src/index.ts"
   },
+  "files": ["dist", "the-local/agents"],
+  "publishConfig": {
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
+  },
   "scripts": {
     "typecheck": "tsc --noEmit",
+    "build": "tsup src/index.ts --format esm --dts --clean",
+    "prepublishOnly": "pnpm build",
     "build:locals": "the-local build ."
   },
   "dependencies": {
@@ -21,8 +40,5 @@
     "prefix": "store",
     "scope": "the permanent event record — recording, projections, and replay on core",
     "agentsDir": "the-local/agents"
-  },
-  "files": [
-    "the-local/agents"
-  ]
+  }
 }
